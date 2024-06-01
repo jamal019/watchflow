@@ -1,73 +1,72 @@
 /*GLOBAL STYLES*/
+
 /*FONT*/
 @import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+
 /*COLOR PALETTE*/
+$dark: #171515;
+$light: #f3f5f9;
+
+$red: #e76f51;
+
 html,
 body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
 body {
   font-family: "Nunito";
-  background-color: #171515;
+  background-color: $dark;
 }
-
 h1,
 h2,
 h3,
 p,
 span {
-  color: #f3f5f9;
+  color: $light;
 }
-
 h1 {
   font-size: 2.5rem;
   font-weight: 800;
   text-align: center;
   margin: 0;
   padding-top: 15px;
+  //margin-bottom: 2.5rem;
 }
-
 h1#logo {
   position: fixed;
   z-index: 99;
-  background-color: #141313;
+  background-color: darken($dark, 1);
   width: 100%;
 }
-
 h2 {
   font-size: 1.7rem;
   margin: 1.7rem 0;
 }
-
 h3 {
   font-size: 1.35rem;
   margin: 1.35rem 0;
 }
-
 p {
   font-size: 1rem;
   margin: 0;
 }
 
+//INTRO
 #intro {
   position: absolute;
   height: 100vh;
   width: 100vw;
-  background-color: #e76f51;
+  background-color: $red;
   z-index: 999;
   text-align: center;
   display: grid;
   place-items: center;
+  div {
+    margin: 0 2rem;
+  }
 }
-#intro div {
-  margin: 0 2rem;
-}
-
 #intro.fadeOut {
   display: none;
 }
-
-/*# sourceMappingURL=styles.css.map */
