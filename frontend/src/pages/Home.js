@@ -16,6 +16,15 @@ const Home = () => {
         <Intro />
       </div> */}
       <SwipeComponent />
+      <div>Made by WatchFlow</div>
+      <footer>
+        <div>
+          <span>01</span>
+          <span>02</span>
+          <span>03</span>
+          <span>04</span>
+        </div>
+      </footer>
     </div>
   );
 };
