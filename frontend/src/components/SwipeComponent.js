@@ -44,13 +44,20 @@ const SwipeComponent = () => {
   }, [TMDB_API_KEY, options]);
 
   return (
-    <div className="swipe-component">
-      {movies.length > 0 ? (
-        movies.map((movie) => <FilmCard key={movie.id} movie={movie} />)
-      ) : (
-        <p>Loading movies...</p>
-      )}
-    </div>
+    <section className="swipe-page">
+      <div className="swipe-thumbs">
+        <span>👍🏼</span>
+        <span>👎🏼</span>
+      </div>
+
+      <div className="swipe-component">
+        {movies.length > 0 ? (
+          movies.map((movie) => <FilmCard key={movie.id} movie={movie} />)
+        ) : (
+          <p>Loading movies...</p>
+        )}
+      </div>
+    </section>
   );
 };
 
