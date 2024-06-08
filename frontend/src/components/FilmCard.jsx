@@ -9,8 +9,8 @@ const FilmCard = ({ movie }) => {
         alt="filmposter"
       />
       <div className="film-infos">
-        <h2>{movie.title}</h2>
-        <p>{movie.release_date}</p>
+        <h2 className="dark">{movie.title}</h2>
+        <p className="dark">{movie.release_date.split("-")[0]}</p>
       </div>
     </div>
   );
