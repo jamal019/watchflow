@@ -1,0 +1,30 @@
+.film-card {
+    max-width: 350px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+}
+
+
+img.filmposter {
+    width: 100%;
+    display: block;
+}
+
+.film-card .film-infos {
+    width: 100%;
+    padding: 1rem 0rem;
+    min-height: 65px;
+    max-height: 65px;
+    background-color: white;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.film-card .film-infos h2,p {
+    font-size: 1.2rem;
+    margin: 0;
+    color: #171515;
+}
