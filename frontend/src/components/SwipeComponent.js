@@ -7,18 +7,17 @@ import "./SwipeComponent.css";
 import FilmCard from "./FilmCard";
 
 const SwipeComponent = () => {
-  const TMDB_API_KEY = process.env.TMDB_API_KEY;
-  //const TMDB_API_TOKEN = process.env.TMDB_API_TOKEN;
+  const TMDB_API_KEY = process.env.TMDB_API;
+  const TMDB_API_TOKEN = process.env.TMDB_TOKEN;
   const options = useMemo(
     () => ({
       method: "GET",
       headers: {
         accept: "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1OTU5ODNkMTc1ZTRiMzcxMTk5Y2Q2ZWExOWJkOTUyYyIsInN1YiI6IjY2NWIzYWRkNzg1NGEwZjkxNzEwMzg4MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.IewKDj8gP21xbX0UBlFU6KIHSSGCzdJyjWeDe74H3BM",
+        Authorization: `Bearer ${TMDB_API_TOKEN}`,
       },
     }),
-    []
+    [TMDB_API_TOKEN]
   );
 
   //const [currentIndex, setCurrentIndex] = useState(0);
