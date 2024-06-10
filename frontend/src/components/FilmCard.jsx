@@ -22,7 +22,7 @@ const FilmCard = ({ movie }) => {
   }, []);
 
   return (
-    <div ref={swipeRef} className="film-card">
+    <div ref={swipeRef} className="film-card" id={movie.id}>
       <img
         className="filmposter"
         src={" https://image.tmdb.org/t/p/w500/" + movie.poster_path}
