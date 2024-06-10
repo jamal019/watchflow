@@ -7,8 +7,9 @@ import "./SwipeComponent.css";
 import FilmCard from "./FilmCard";
 
 const SwipeComponent = () => {
-  const TMDB_API_KEY = process.env.TMDB_API;
-  const TMDB_API_TOKEN = process.env.TMDB_TOKEN;
+  const TMDB_API_KEY = process.env.REACT_APP_TMDB_API;
+  const TMDB_API_TOKEN = process.env.REACT_APP_TMDB_TOKEN;
+
   const options = useMemo(
     () => ({
       method: "GET",
