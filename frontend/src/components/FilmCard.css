@@ -1,8 +1,13 @@
+
+.swipe-component .swipe {
+    pointer-events: none;
+}
 .film-card {
     /*max-width: 350px;*/
     position: relative;
     overflow: hidden;
     border-radius: 15px;
+    pointer-events: all;
 }
 @media screen and (min-width: 900px) {
     .film-card {

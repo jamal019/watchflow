@@ -1,28 +1,8 @@
 import "./FilmCard.css";
-import { useEffect, useRef } from "react";
-import Hammer from "hammerjs";
 
-const FilmCard = ({ movie }) => {
-  const swipeRef = useRef(null);
-
-  useEffect(() => {
-    if (swipeRef.current) {
-      const hammer = new Hammer(swipeRef.current);
-      hammer.on("swipeleft", () => {
-        alert("Swiped left!");
-      });
-      hammer.on("swiperight", () => {
-        alert("Swiped right!");
-      });
-      return () => {
-        hammer.off("swipeleft");
-        hammer.off("swiperight");
-      };
-    }
-  }, []);
-
+const FilmCard = ({ movie, onClick }) => {
   return (
-    <div ref={swipeRef} className="film-card" id={movie.id}>
+    <div className="film-card" id={movie.id} onClick={onClick}>
       <img
         className="filmposter"
         src={" https://image.tmdb.org/t/p/w500/" + movie.poster_path}

@@ -20,6 +20,9 @@ body {
   font-family: "Nunito";
   background-color: $dark;
 }
+body.no-scroll {
+  overflow-y: hidden;
+}
 h1,
 h2,
 h3,
@@ -84,6 +87,7 @@ footer {
   bottom: 0;
   width: 100vw;
   border-radius: 30px 30px 0 0;
+  z-index: 101;
   @media screen and (min-width: 900px) {
     display: none;
   }

@@ -5,11 +5,21 @@ import React, { useState, useEffect, useMemo } from "react";
 //import traintobusan from "../assets/traintobusan.jpg";
 import "./SwipeComponent.css";
 import FilmCard from "./FilmCard";
+import Details from "./Details";
+
+import TinderCard from "react-tinder-card";
 
 const SwipeComponent = () => {
+  //STATES
+  const [movies, setMovies] = useState([]);
+  const [selectedMovieId, setSelectedMovieId] = useState(null);
+  const [isClosing, setIsClosing] = useState(false);
+
+  //API VARIABLES
   const TMDB_API_KEY = process.env.REACT_APP_TMDB_API;
   const TMDB_API_TOKEN = process.env.REACT_APP_TMDB_TOKEN;
 
+  //API CALL OPTIONS
   const options = useMemo(
     () => ({
       method: "GET",
@@ -21,14 +31,15 @@ const SwipeComponent = () => {
     [TMDB_API_TOKEN]
   );
 
-  //const [currentIndex, setCurrentIndex] = useState(0);
-  //const navigate = useNavigate();
-  // const movies = [
-  //   { id: 1, title: "Train to Busan", image: traintobusan },
-  //   { id: 2, title: "Parasite", image: parasite },
-  // ];
-  const [movies, setMovies] = useState([]);
+  //SWIPE FUNCTIONALITIES
+  const onSwipe = (direction) => {
+    console.log("You swiped: " + direction);
+  };
+  const onCardLeftScreen = (myIdentifier) => {
+    console.log(myIdentifier + " left the screen");
+  };
 
+  //API CALL GET MOVIES
   useEffect(() => {
     fetch(
       `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_API_KEY}&page=1`,
@@ -43,21 +54,70 @@ const SwipeComponent = () => {
       });
   }, [TMDB_API_KEY, options]);
 
-  return (
-    <section className="swipe-page">
-      <div className="swipe-thumbs">
-        <span>👍🏼</span>
-        <span>👎🏼</span>
-      </div>
+  //SHOW/HIDE DETAILS
+  const handleDetailsClick = (movieId) => {
+    console.log("Card clicked: ", movieId);
+    setSelectedMovieId(movieId);
+    document.querySelector("body").classList.add("no-scroll");
+  };
 
-      <div className="swipe-component">
-        {movies.length > 0 ? (
-          movies.map((movie) => <FilmCard key={movie.id} movie={movie} />)
-        ) : (
-          <p>Loading movies...</p>
-        )}
-      </div>
-    </section>
+  const closeDetails = () => {
+    document.querySelector("body").classList.remove("no-scroll");
+    setIsClosing(true); // Start closing animation
+    setTimeout(() => {
+      setSelectedMovieId(null);
+      setIsClosing(false); // Reset closing state
+    }, 500); // Match the duration of hideDown animation
+  };
+
+  return (
+    <>
+      <section className="swipe-page">
+        <div className="swipe-thumbs">
+          <span>👍🏼</span>
+          <span>👎🏼</span>
+        </div>
+
+        <div className="swipe-component">
+          {movies.length > 0 ? (
+            movies.map((movie) => (
+              // <TinderCard
+              //   className="swipe"
+              //   key={movie.id}
+              //   onSwipe={onSwipe}
+              //   onCardLeftScreen={() => onCardLeftScreen(movie.title)}
+              //   preventSwipe={["up", "down"]}
+              // >
+              <FilmCard
+                key={movie.id}
+                movie={movie}
+                onClick={() => handleDetailsClick(movie.id)}
+              />
+              /* </TinderCard> */
+            ))
+          ) : (
+            <p>Loading movies...</p>
+          )}
+        </div>
+      </section>
+
+      {selectedMovieId && (
+        <div
+          className={`modal-details ${isClosing ? "hide" : ""}`}
+          onClick={closeDetails}
+        >
+          <div
+            className="modal-details-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p className="close-details" onClick={closeDetails}>
+              &times;
+            </p>
+            <Details movieId={selectedMovieId} />
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
