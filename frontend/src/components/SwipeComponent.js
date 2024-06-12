@@ -41,8 +41,9 @@ const SwipeComponent = () => {
 
   //API CALL GET MOVIES
   useEffect(() => {
+    const randNum = Math.floor(Math.random() * 99) + 1;
     fetch(
-      `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_API_KEY}&page=1`,
+      `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_API_KEY}&page=${randNum}`,
       options
     )
       .then((response) => response.json())
@@ -50,7 +51,7 @@ const SwipeComponent = () => {
         if (data && data.results) {
           setMovies(data.results);
         }
-        console.log(data);
+        console.log(data, randNum);
       });
   }, [TMDB_API_KEY, options]);
 

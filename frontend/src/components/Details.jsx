@@ -52,9 +52,10 @@ const Details = ({ movieId }) => {
           />
           <div className="modal-details-text">
             <h2>{movieDetails.title}</h2>
+            <p>{movieDetails.release_date.split("-")[0]}</p>
+            <br />
             <p>{movieDetails.overview}</p>
-            <p>Release Date: {movieDetails.release_date}</p>
-            <p>Rating: {movieDetails.vote_average}</p>
+            {/* <p>Rating: {movieDetails.vote_average}</p> */}
             <div style={{ height: "25vh" }}></div>
           </div>
         </>
