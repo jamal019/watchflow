@@ -16,7 +16,7 @@ const Home = () => {
         <Intro />
       </div> */}
       <SwipeComponent />
-      <div>Made by WatchFlow</div>
+      {/* <div>Made by WatchFlow</div> */}
       <footer>
         <div>
           <span>01</span>

@@ -7,8 +7,6 @@ import "./SwipeComponent.css";
 import FilmCard from "./FilmCard";
 import Details from "./Details";
 
-import TinderCard from "react-tinder-card";
-
 const SwipeComponent = () => {
   //STATES
   const [movies, setMovies] = useState([]);
@@ -30,14 +28,6 @@ const SwipeComponent = () => {
     }),
     [TMDB_API_TOKEN]
   );
-
-  //SWIPE FUNCTIONALITIES
-  const onSwipe = (direction) => {
-    console.log("You swiped: " + direction);
-  };
-  const onCardLeftScreen = (myIdentifier) => {
-    console.log(myIdentifier + " left the screen");
-  };
 
   //API CALL GET MOVIES
   useEffect(() => {
@@ -68,7 +58,23 @@ const SwipeComponent = () => {
     setTimeout(() => {
       setSelectedMovieId(null);
       setIsClosing(false); // Reset closing state
-    }, 500); // Match the duration of hideDown animation
+    }, 500);
+  };
+
+  const handleSwipe = (direction, movie) => {
+    //const originCol = document.querySelector("body").style.backgroundColor;
+
+    // if (direction === "left") {
+    //   document.querySelector("body").classList.add("liked-movie");
+    // } else if (direction === "right") {
+    //   document.querySelector("body").classList.add("disliked-movie");
+    // }
+    setTimeout(() => {
+      document.body.classList.remove("liked-movie", "disliked-movie");
+    }, 200);
+
+    console.log(`Swiped ${direction} on movie: ${movie.title}`);
+    setMovies((prevMovies) => prevMovies.filter((m) => m.id !== movie.id));
   };
 
   return (
@@ -82,19 +88,12 @@ const SwipeComponent = () => {
         <div className="swipe-component">
           {movies.length > 0 ? (
             movies.map((movie) => (
-              // <TinderCard
-              //   className="swipe"
-              //   key={movie.id}
-              //   onSwipe={onSwipe}
-              //   onCardLeftScreen={() => onCardLeftScreen(movie.title)}
-              //   preventSwipe={["up", "down"]}
-              // >
               <FilmCard
                 key={movie.id}
                 movie={movie}
                 onClick={() => handleDetailsClick(movie.id)}
+                onSwipe={handleSwipe}
               />
-              /* </TinderCard> */
             ))
           ) : (
             <p>Loading movies...</p>

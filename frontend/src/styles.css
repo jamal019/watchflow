@@ -11,11 +11,19 @@ body {
 
 body {
   font-family: "Nunito";
-  background-color: #171515;
+  background: #171515;
+  transition: background 300ms ease-in-out;
 }
 
 body.no-scroll {
   overflow-y: hidden;
+}
+
+body.liked-movie{
+  background:  rgba(42, 157, 143, 1) ;
+}
+body.disliked-movie{
+  background:rgba(231, 111, 81, 1);
 }
 
 h1,
@@ -37,7 +45,7 @@ h1 {
 h1#logo {
   position: fixed;
   z-index: 99;
-  background-color: #141313;
+  /* background-color: #171515; */
   width: 100%;
 }
 
