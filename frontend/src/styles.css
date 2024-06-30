@@ -19,11 +19,12 @@ body.no-scroll {
   overflow-y: hidden;
 }
 
-body.liked-movie{
-  background:  rgba(42, 157, 143, 1) ;
+body.liked-movie {
+  background: #2a9d8f;
 }
-body.disliked-movie{
-  background:rgba(231, 111, 81, 1);
+
+body.disliked-movie {
+  background: #e76f51;
 }
 
 h1,
@@ -45,7 +46,6 @@ h1 {
 h1#logo {
   position: fixed;
   z-index: 99;
-  /* background-color: #171515; */
   width: 100%;
 }
 
@@ -68,6 +68,27 @@ p {
   color: #171515;
 }
 
+button {
+  background: #f3f5f9;
+  color: #e05a47;
+  border: none;
+  padding: 8px;
+  font-weight: bold;
+}
+button:focus {
+  background-color: #e05a47;
+  color: #f3f5f9;
+}
+
+#applogo {
+  display: block;
+  max-width: 110px;
+  margin: 2rem auto;
+  border-radius: 100%;
+  transform: rotate(0deg) scale(1.25);
+  animation: logo 2500ms ease-in-out 500ms forwards;
+}
+
 #intro {
   position: absolute;
   height: 100vh;
@@ -78,14 +99,32 @@ p {
   display: grid;
   place-items: center;
 }
-#intro div {
-  margin: 0 2rem;
-}
 
 #intro.fadeOut {
-  display: none;
+  animation: fadeOut 1200ms ease-in-out forwards;
 }
 
+.login {
+  display: flex;
+  flex-flow: column wrap;
+  gap: 1rem;
+}
+.login input {
+  border: none;
+  padding: 8px;
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    visibility: none;
+  }
+}
+@keyframes logo {
+  to {
+    transform: rotate(360deg) scale(1);
+  }
+}
 footer {
   height: 65px;
   background: #e05a47;

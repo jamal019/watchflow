@@ -18,11 +18,19 @@ body {
 }
 body {
   font-family: "Nunito";
-  background-color: $dark;
+  background: $dark;
+  transition: background 300ms ease-in-out;
 }
 body.no-scroll {
   overflow-y: hidden;
 }
+body.liked-movie {
+  background: rgba(42, 157, 143, 1);
+}
+body.disliked-movie {
+  background: $red;
+}
+
 h1,
 h2,
 h3,
@@ -41,7 +49,7 @@ h1 {
 h1#logo {
   position: fixed;
   z-index: 99;
-  background-color: darken($dark, 1);
+  // background-color: darken($dark, 1);
   width: 100%;
 }
 h2 {
@@ -61,7 +69,31 @@ p {
   color: #171515;
 }
 
+button {
+  background: $light;
+  color: $darkred;
+  border: none;
+  padding: 8px;
+  font-weight: bold;
+  &:focus {
+    background-color: $darkred;
+    color: $light;
+  }
+}
+
 //INTRO
+#applogo {
+  // position: absolute;
+  display: block;
+  max-width: 110px;
+  // top: 8rem;
+  // left: 0;
+  // right: 0;
+  margin: 2rem auto;
+  border-radius: 100%;
+  transform: rotate(0deg) scale(1.25);
+  animation: logo 2500ms ease-in-out 500ms forwards;
+}
 #intro {
   position: absolute;
   height: 100vh;
@@ -71,12 +103,34 @@ p {
   text-align: center;
   display: grid;
   place-items: center;
-  div {
-    margin: 0 2rem;
-  }
+  // div {
+  //   margin: 0 2rem;
+  // }
 }
 #intro.fadeOut {
-  display: none;
+  animation: fadeOut 1200ms ease-in-out forwards;
+}
+.login {
+  display: flex;
+  flex-flow: column wrap;
+  gap: 1rem;
+  input {
+    border: none;
+    padding: 8px;
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    visibility: none;
+  }
+}
+
+@keyframes logo {
+  to {
+    transform: rotate(360deg) scale(1);
+  }
 }
 
 //FOOTER

@@ -46,6 +46,7 @@ const FilmCard = ({ movie, onClick, onSwipe }) => {
         document.body.classList.remove("liked-movie", "disliked-movie");
       });
     }
+    console.log(document.querySelectorAll(".film-card").length);
   };
 
   return (
