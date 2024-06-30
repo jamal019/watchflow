@@ -1,4 +1,7 @@
 /* src/components/SwipeComponent.css */
+.home {
+  margin-bottom: 10rem;
+}
 
 .swipe-page{
   padding: 6rem 1.5rem;
@@ -37,6 +40,32 @@
 }
 .swipe-thumbs span{
   font-size: 3rem;
+}
+
+/*New Round*/
+.swiped-left-movies{
+  display: none;
+  text-align: center;
+  color: white;
+}
+.swiped-left-movies ul{
+  list-style: none;
+  text-align: left;
+  display: flex;
+  flex-flow: row wrap;
+  gap: 1rem;
+  padding: 0;
+  justify-content: center;
+}
+.swiped-left-movies-img{
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 50%;
+}
+.swiped-left-movies.reveal{
+  display: block;
 }
 
 /*---XXX-----*/

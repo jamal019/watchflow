@@ -1,23 +1,18 @@
-// src/components/SwipeComponent.js
-import React, { useState, useEffect, useMemo } from "react";
-//import { useNavigate } from "react-router-dom";
-//import parasite from "../assets/parasite.jpg";
-//import traintobusan from "../assets/traintobusan.jpg";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import "./SwipeComponent.css";
 import FilmCard from "./FilmCard";
 import Details from "./Details";
 
 const SwipeComponent = () => {
-  //STATES
   const [movies, setMovies] = useState([]);
   const [selectedMovieId, setSelectedMovieId] = useState(null);
   const [isClosing, setIsClosing] = useState(false);
+  const [swipedLeftMovies, setSwipedLeftMovies] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  //API VARIABLES
   const TMDB_API_KEY = process.env.REACT_APP_TMDB_API;
   const TMDB_API_TOKEN = process.env.REACT_APP_TMDB_TOKEN;
 
-  //API CALL OPTIONS
   const options = useMemo(
     () => ({
       method: "GET",
@@ -29,8 +24,8 @@ const SwipeComponent = () => {
     [TMDB_API_TOKEN]
   );
 
-  //API CALL GET MOVIES
-  useEffect(() => {
+  const fetchMovies = useCallback(() => {
+    setLoading(true);
     const randNum = Math.floor(Math.random() * 99) + 1;
     fetch(
       `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_API_KEY}&page=${randNum}`,
@@ -41,11 +36,30 @@ const SwipeComponent = () => {
         if (data && data.results) {
           setMovies(data.results);
         }
+        setLoading(false);
         console.log(data, randNum);
       });
   }, [TMDB_API_KEY, options]);
 
-  //SHOW/HIDE DETAILS
+  const fetchSimilarMovies = useCallback((movieId) => {
+    setLoading(true);
+    fetch(
+      `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${TMDB_API_KEY}`,
+      options
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        if (data && data.results) {
+          setMovies(data.results);
+        }
+        setLoading(false);
+      });
+  }, [TMDB_API_KEY, options]);
+
+  useEffect(() => {
+    fetchMovies();
+  }, [fetchMovies]);
+
   const handleDetailsClick = (movieId) => {
     console.log("Card clicked: ", movieId);
     setSelectedMovieId(movieId);
@@ -54,27 +68,26 @@ const SwipeComponent = () => {
 
   const closeDetails = () => {
     document.querySelector("body").classList.remove("no-scroll");
-    setIsClosing(true); // Start closing animation
+    setIsClosing(true);
     setTimeout(() => {
       setSelectedMovieId(null);
-      setIsClosing(false); // Reset closing state
+      setIsClosing(false);
     }, 500);
   };
 
   const handleSwipe = (direction, movie) => {
-    //const originCol = document.querySelector("body").style.backgroundColor;
-
-    // if (direction === "left") {
-    //   document.querySelector("body").classList.add("liked-movie");
-    // } else if (direction === "right") {
-    //   document.querySelector("body").classList.add("disliked-movie");
-    // }
+    if (direction === "left") {
+      setSwipedLeftMovies((prevMovies) => [...prevMovies, movie]);
+    }
     setTimeout(() => {
       document.body.classList.remove("liked-movie", "disliked-movie");
     }, 200);
-
-    console.log(`Swiped ${direction} on movie: ${movie.title}`);
     setMovies((prevMovies) => prevMovies.filter((m) => m.id !== movie.id));
+  };
+
+  const handleMovieImageClick = (movieId) => {
+    fetchSimilarMovies(movieId);
+    setSwipedLeftMovies([]); // Clear swiped left movies for new round
   };
 
   return (
@@ -84,9 +97,10 @@ const SwipeComponent = () => {
           <span>👍🏼</span>
           <span>👎🏼</span>
         </div>
-
         <div className="swipe-component">
-          {movies.length > 0 ? (
+          {loading ? (
+            <p>Loading movies...</p>
+          ) : (
             movies.map((movie) => (
               <FilmCard
                 key={movie.id}
@@ -95,27 +109,36 @@ const SwipeComponent = () => {
                 onSwipe={handleSwipe}
               />
             ))
-          ) : (
-            <p>Loading movies...</p>
           )}
         </div>
       </section>
-
       {selectedMovieId && (
-        <div
-          className={`modal-details ${isClosing ? "hide" : ""}`}
-          onClick={closeDetails}
-        >
-          <div
-            className="modal-details-content"
-            onClick={(e) => e.stopPropagation()}
-          >
+        <div className={`modal-details ${isClosing ? "hide" : ""}`} onClick={closeDetails}>
+          <div className="modal-details-content" onClick={(e) => e.stopPropagation()}>
             <p className="close-details" onClick={closeDetails}>
               &times;
             </p>
             <Details movieId={selectedMovieId} />
           </div>
         </div>
+      )}
+      {swipedLeftMovies.length > 0 && (
+        <section className="swiped-left-movies">
+          <h2>NEW SWIPE ROUND?</h2>
+          <ul>
+            {swipedLeftMovies.map((movie) => (
+              <div key={movie.id}>
+                <img
+                  className="swiped-left-movies-img"
+                  src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+                  alt={movie.id}
+                  onClick={() => handleMovieImageClick(movie.id)} // Add click handler
+                />
+                {/* <li>{movie.title}</li> */}
+              </div>
+            ))}
+          </ul>
+        </section>
       )}
     </>
   );

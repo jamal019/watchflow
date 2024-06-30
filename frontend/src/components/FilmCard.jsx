@@ -1,4 +1,3 @@
-// src/components/FilmCard.js
 import "./FilmCard.css";
 import {
   motion,
@@ -6,7 +5,6 @@ import {
   useTransform,
   useAnimation,
 } from "framer-motion";
-
 import { useEffect } from "react";
 
 const FilmCard = ({ movie, onClick, onSwipe }) => {
@@ -40,13 +38,15 @@ const FilmCard = ({ movie, onClick, onSwipe }) => {
         document.body.classList.remove("liked-movie", "disliked-movie");
       });
     } else {
-      //const direction = info.offset.x < 0 ? -1000 : 1000;
       animControls.start({ x: info.point.x < 0 ? -300 : 300 }).then(() => {
         onSwipe(info.point.x < 0 ? "left" : "right", movie);
         document.body.classList.remove("liked-movie", "disliked-movie");
       });
     }
     console.log(document.querySelectorAll(".film-card").length);
+    if (document.querySelectorAll(".film-card").length <= 1) {
+      document.querySelector(".swiped-left-movies").classList.add("reveal");
+    }
   };
 
   return (
@@ -63,7 +63,7 @@ const FilmCard = ({ movie, onClick, onSwipe }) => {
       <div className="filmposter-wrapper">
         <img
           className="filmposter"
-          src={"https://image.tmdb.org/t/p/w500/" + movie.poster_path}
+          src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
           alt="filmposter"
           onDragStart={(e) => e.preventDefault()} // Prevent default drag behavior
         />

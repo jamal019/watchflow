@@ -3,8 +3,15 @@ import applogo from '../assets/applogo.png';
 
 function start() {
   let introScreen = document.querySelector("#intro");
-  introScreen.classList.add("fadeOut");
-  setTimeout(() => { introScreen.style.display = "none" }, 1000);
+  let nameLogin = document.getElementById("name");
+  let pwLogin = document.getElementById("password");
+  if (nameLogin.value !== "" && nameLogin.value === "demo" && pwLogin !== "" && pwLogin.value === "demo") {
+    introScreen.classList.add("fadeOut");
+    setTimeout(() => { introScreen.style.display = "none" }, 1000);
+  }
+  else {
+    alert("Failed Login");
+  }
 }
 
 const Intro = () => {
@@ -14,8 +21,8 @@ const Intro = () => {
       <h1>WatchFlow</h1>
       <br />
       <div className="login">
-        <input type="text" placeholder="Name" />
-        <input type="password" placeholder="Password" />
+        <input id="name" type="text" placeholder="demo" />
+        <input id="password" type="password" placeholder="demo" />
         <button onClick={start}>LOGIN</button>
       </div>
     </div>
