@@ -125,6 +125,7 @@ const SwipeComponent = () => {
       {swipedLeftMovies.length > 0 && (
         <section className="swiped-left-movies">
           <h2>NEW SWIPE ROUND?</h2>
+          <h3>Select one below to swipe similar movies</h3>
           <ul>
             {swipedLeftMovies.map((movie) => (
               <div key={movie.id}>
