@@ -95,7 +95,7 @@ button {
   animation: logo 2500ms ease-in-out 500ms forwards;
 }
 #intro {
-  position: absolute;
+  position: fixed;
   height: 100vh;
   width: 100vw;
   background-color: $red;
@@ -103,6 +103,7 @@ button {
   text-align: center;
   display: grid;
   place-items: center;
+  top: 0;
   // div {
   //   margin: 0 2rem;
   // }

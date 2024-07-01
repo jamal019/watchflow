@@ -6,6 +6,7 @@ import {
   useAnimation,
 } from "framer-motion";
 import { useEffect } from "react";
+import defaultPoster from "../assets/default-movie.png";
 
 const FilmCard = ({ movie, onClick, onSwipe }) => {
   const motionValue = useMotionValue(0);
@@ -49,6 +50,10 @@ const FilmCard = ({ movie, onClick, onSwipe }) => {
     }
   };
 
+  const handleImageError = (event) => {
+    event.target.src = defaultPoster;
+  };
+
   return (
     <motion.div
       className="film-card"
@@ -62,6 +67,7 @@ const FilmCard = ({ movie, onClick, onSwipe }) => {
     >
       <div className="filmposter-wrapper">
         <img
+          onError={handleImageError}
           className="filmposter"
           src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
           alt="filmposter"

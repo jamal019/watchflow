@@ -3,6 +3,8 @@ import "./SwipeComponent.css";
 import FilmCard from "./FilmCard";
 import Details from "./Details";
 
+import defaultPoster from "../assets/default-movie.png";
+
 const SwipeComponent = () => {
   const [movies, setMovies] = useState([]);
   const [selectedMovieId, setSelectedMovieId] = useState(null);
@@ -90,6 +92,10 @@ const SwipeComponent = () => {
     setSwipedLeftMovies([]); // Clear swiped left movies for new round
   };
 
+  const handleImageError = (event) => {
+    event.target.src = defaultPoster;
+  };
+
   return (
     <>
       <section className="swipe-page">
@@ -130,6 +136,7 @@ const SwipeComponent = () => {
             {swipedLeftMovies.map((movie) => (
               <div key={movie.id}>
                 <img
+                  onError={handleImageError}
                   className="swiped-left-movies-img"
                   src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
                   alt={movie.id}

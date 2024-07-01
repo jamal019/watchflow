@@ -90,7 +90,7 @@ button:focus {
 }
 
 #intro {
-  position: absolute;
+  position: fixed;
   height: 100vh;
   width: 100vw;
   background-color: #e76f51;
@@ -98,6 +98,7 @@ button:focus {
   text-align: center;
   display: grid;
   place-items: center;
+  top: 0;
 }
 
 #intro.fadeOut {

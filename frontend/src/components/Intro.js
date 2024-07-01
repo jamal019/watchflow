@@ -1,29 +1,45 @@
-import React from "react";
+// src/components/Intro.js
+import React, { useState, useEffect } from "react";
 import applogo from '../assets/applogo.png';
 
-function start() {
-  let introScreen = document.querySelector("#intro");
-  let nameLogin = document.getElementById("name");
-  let pwLogin = document.getElementById("password");
-  if (nameLogin.value !== "" && nameLogin.value === "demo" && pwLogin !== "" && pwLogin.value === "demo") {
-    introScreen.classList.add("fadeOut");
-    setTimeout(() => { introScreen.style.display = "none" }, 1000);
-  }
-  else {
-    alert("Failed Login");
-  }
-}
+const Intro = ({ onLogin }) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-const Intro = () => {
+  useEffect(() => {
+    const loggedIn = localStorage.getItem("isLoggedIn");
+    if (loggedIn) {
+      setIsLoggedIn(true);
+      onLogin();
+    }
+  }, [onLogin]);
+
+  const start = () => {
+    let nameLogin = document.getElementById("name").value;
+    let pwLogin = document.getElementById("password").value;
+    if (nameLogin === "demo" && pwLogin === "demo") {
+      localStorage.setItem("isLoggedIn", "true");
+      setIsLoggedIn(true);
+      onLogin();
+    } else {
+      alert("Failed Login");
+    }
+  };
+
+  if (isLoggedIn) {
+    return null;
+  }
+
   return (
-    <div>
-      <img id="applogo" src={applogo} alt="logo" />
-      <h1>WatchFlow</h1>
-      <br />
-      <div className="login">
-        <input id="name" type="text" placeholder="demo" />
-        <input id="password" type="password" placeholder="demo" />
-        <button onClick={start}>LOGIN</button>
+    <div id="intro">
+      <div>
+        <img id="applogo" src={applogo} alt="logo" />
+        <h1>WatchFlow</h1>
+        <br />
+        <div className="login">
+          <input id="name" type="text" placeholder="demo" />
+          <input id="password" type="password" placeholder="demo" />
+          <button onClick={start}>LOGIN</button>
+        </div>
       </div>
     </div>
   );
