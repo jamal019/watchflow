@@ -64,7 +64,9 @@ p {
   font-size: 1rem;
   margin: 0;
 }
-
+a {
+  text-decoration: none;
+}
 .dark {
   color: #171515;
 }
@@ -98,7 +100,8 @@ button {
   position: fixed;
   height: 100vh;
   width: 100vw;
-  background-color: $red;
+  background: linear-gradient(180deg, #e05a47, #e16959);
+  background-color: $darkred;
   z-index: 999;
   text-align: center;
   display: grid;

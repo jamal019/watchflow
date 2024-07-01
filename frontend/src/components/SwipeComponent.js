@@ -4,6 +4,7 @@ import FilmCard from "./FilmCard";
 import Details from "./Details";
 
 import defaultPoster from "../assets/default-movie.png";
+import swipeGif from "../assets/swipe.gif";
 
 const SwipeComponent = () => {
   const [movies, setMovies] = useState([]);
@@ -96,8 +97,25 @@ const SwipeComponent = () => {
     event.target.src = defaultPoster;
   };
 
+  const addFadeOutClass = () => {
+    const swipeLoader = document.getElementById("swipeloader");
+    if (swipeLoader) {
+      swipeLoader.classList.add("fadeOut");
+    } else {
+      requestAnimationFrame(addFadeOutClass);
+    }
+  };
+
+  setTimeout(() => {
+    requestAnimationFrame(addFadeOutClass);
+  }, 2000);
+
   return (
     <>
+      <div id="swipeloader">
+        <img src={swipeGif} alt="swipe gif" />
+      </div>
+
       <section className="swipe-page">
         <div className="swipe-thumbs">
           <span>👍🏼</span>

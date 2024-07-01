@@ -3,6 +3,30 @@
   margin-bottom: 10rem;
 }
 
+#swipeloader{
+  background-color: #e05a47;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99;
+  opacity: 1;
+  display: grid;
+  place-items: center;
+}
+#swipeloader img{
+  max-width: 225px;
+}
+#swipeloader.fadeOut{
+  animation: fadeOut 1000ms ease-in-out forwards;
+}
+@keyframes fadeOut {
+  to{
+    opacity: 0;
+    visibility: 0;
+    z-index: -999;
+  }
+}
+
 .swipe-page{
   padding: 4rem 1.5rem;
   max-width: 1920px;

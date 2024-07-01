@@ -64,6 +64,10 @@ p {
   margin: 0;
 }
 
+a {
+  text-decoration: none;
+}
+
 .dark {
   color: #171515;
 }
@@ -93,7 +97,8 @@ button:focus {
   position: fixed;
   height: 100vh;
   width: 100vw;
-  background-color: #e76f51;
+  background: linear-gradient(180deg, #e05a47, #e16959);
+  background-color: #e05a47;
   z-index: 999;
   text-align: center;
   display: grid;
