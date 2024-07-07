@@ -6,6 +6,8 @@ import Details from "./Details";
 import defaultPoster from "../assets/default-movie.png";
 import swipeGif from "../assets/swipe.gif";
 
+//import { database, ref, push } from '../firebase';
+
 const SwipeComponent = () => {
   const [movies, setMovies] = useState([]);
   const [selectedMovieId, setSelectedMovieId] = useState(null);
@@ -81,6 +83,9 @@ const SwipeComponent = () => {
   const handleSwipe = (direction, movie) => {
     if (direction === "left") {
       setSwipedLeftMovies((prevMovies) => [...prevMovies, movie]);
+      //ADD TO FIREBASE 'MOVIES'
+      // const moviesRef = ref(database, 'movies');
+      // push(moviesRef, movie);
     }
     setTimeout(() => {
       document.body.classList.remove("liked-movie", "disliked-movie");
