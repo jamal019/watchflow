@@ -117,7 +117,7 @@ const Details = ({ movieId }) => {
             <ul>
               {provider.flatrate.map((prov) => (
                 <li key={prov.provider_id}>
-                  <a target="_blank" href={provider.link}>
+                  <a target="_blank" href={provider.link} rel="noreferrer">
                   <img
                   src={`https://image.tmdb.org/t/p/w45${prov.logo_path}`}
                   alt={prov.provider_name}
