@@ -73,6 +73,15 @@
 .modal-details-text{
     padding: 0 1rem;
 }
+.providers ul{
+    list-style-type: none;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 2rem;
+    padding: 0;
+}
 .close-details{
     font-size: 2rem;
     text-align: right;

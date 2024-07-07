@@ -4,6 +4,7 @@ import "./Details.css";
 const Details = ({ movieId }) => {
   const [movieDetails, setMovieDetails] = useState(null);
   const [trailerKey, setTrailerKey] = useState(null);
+  const [provider, setProvider] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -45,6 +46,21 @@ const Details = ({ movieId }) => {
       console.error("Error fetching movie trailers:", error);
       setError(error);
     });
+    // Fetch movie providers
+    fetch(`https://api.themoviedb.org/3/movie/${movieId}/watch/providers`, options)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Provider:", data.results["DE"]);
+      console.log("PROV:", data.results["DE"].buy);
+      const res = data.results["DE"];
+      if(res){
+        setProvider(res);
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching movie providers:", error);
+      setError(error);
+    });
   }, [movieId, options]);
 
   if (loading) {
@@ -54,7 +70,7 @@ const Details = ({ movieId }) => {
   if (error) {
     return <div>Error loading movie details.</div>;
   }
-
+  console.log("Provider.buy:", provider);
   return (
     <section className="details-page">
       {movieDetails && (
@@ -85,7 +101,7 @@ const Details = ({ movieId }) => {
             <div className="genres">
             {
               movieDetails.genres.map((genre) => {
-               return <p><strong>{genre.name}</strong></p>
+               return <p key={genre.id}><strong>{genre.name}</strong></p>
               })
             }
             </div>
@@ -93,6 +109,30 @@ const Details = ({ movieId }) => {
             <p>{movieDetails.release_date.split("-")[0]}</p>
             <br />
             <p>{movieDetails.overview}</p>
+            <br />
+            <h3>Where to watch</h3>
+            <div className="providers">
+              {provider && provider.flatrate && provider.flatrate.length > 0 ? (
+              <>
+            <ul>
+              {provider.flatrate.map((prov) => (
+                <li key={prov.provider_id}>
+                  <a target="_blank" href={provider.link}>
+                  <img
+                  src={`https://image.tmdb.org/t/p/w45${prov.logo_path}`}
+                  alt={prov.provider_name}
+                  />
+                  </a>
+                  {/* <p>{prov.provider_name}</p> */}
+                </li>
+              ))}
+            </ul>
+            </>
+          ) : (
+            <p>No providers available</p>
+          )}
+          </div>
+            {/* <p>{provider.flatrate[0].provider_name}</p> */}
             {/* <p>Rating: {movieDetails.vote_average}</p> */}
             <div style={{ height: "25vh" }}></div>
           </div>
