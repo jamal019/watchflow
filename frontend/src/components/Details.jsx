@@ -50,8 +50,8 @@ const Details = ({ movieId }) => {
     fetch(`https://api.themoviedb.org/3/movie/${movieId}/watch/providers`, options)
     .then((response) => response.json())
     .then((data) => {
-      console.log("Provider:", data.results["DE"]);
-      console.log("PROV:", data.results["DE"].buy);
+      //console.log("Provider:", data.results["DE"]);
+      //console.log("PROV:", data.results["DE"].buy);
       const res = data.results["DE"];
       if(res){
         setProvider(res);
@@ -70,7 +70,7 @@ const Details = ({ movieId }) => {
   if (error) {
     return <div>Error loading movie details.</div>;
   }
-  console.log("Provider.buy:", provider);
+ // console.log("Provider.buy:", provider);
   return (
     <section className="details-page">
       {movieDetails && (
