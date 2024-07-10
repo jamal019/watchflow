@@ -149,6 +149,11 @@ footer {
   @media screen and (min-width: 900px) {
     display: none;
   }
+  svg{
+    width: 25px;
+    height: 25px;
+    display: block;
+  }
   div {
     padding: 25px 0;
     display: flex;

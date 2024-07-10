@@ -145,6 +145,11 @@ footer {
     display: none;
   }
 }
+footer svg {
+  width: 25px;
+  height: 25px;
+  display: block;
+}
 footer div {
   padding: 25px 0;
   display: flex;

@@ -14,6 +14,7 @@ const SwipeComponent = () => {
   const [isClosing, setIsClosing] = useState(false);
   const [swipedLeftMovies, setSwipedLeftMovies] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
 
   const TMDB_API_KEY = process.env.REACT_APP_TMDB_API;
   const TMDB_API_TOKEN = process.env.REACT_APP_TMDB_TOKEN;
@@ -42,12 +43,13 @@ const SwipeComponent = () => {
           setMovies(data.results);
         }
         setLoading(false);
-        console.log(data, randNum);
+        //console.log(data, randNum);
       });
   }, [TMDB_API_KEY, options]);
 
   const fetchSimilarMovies = useCallback((movieId) => {
     setLoading(true);
+    setShowLoader(true);
     fetch(
       `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${TMDB_API_KEY}`,
       options
@@ -58,6 +60,9 @@ const SwipeComponent = () => {
           setMovies(data.results);
         }
         setLoading(false);
+        setTimeout(() => {
+          setShowLoader(false);
+        }, 3000); 
       });
   }, [TMDB_API_KEY, options]);
 
@@ -113,13 +118,18 @@ const SwipeComponent = () => {
 
   setTimeout(() => {
     requestAnimationFrame(addFadeOutClass);
-  }, 2000);
+  }, 3000);
 
   return (
     <>
-      <div id="swipeloader">
-        <img src={swipeGif} alt="swipe gif" />
-      </div>
+        <div id="swipeloader">
+          <img src={swipeGif} alt="swipe gif" />
+        </div>
+      {showLoader && (
+        <div id="swipeloader">
+          <img src={swipeGif} alt="swipe gif" />
+        </div>
+      )}
 
       <section className="swipe-page">
         <div className="swipe-thumbs">
