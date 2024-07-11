@@ -1,0 +1,19 @@
+.favoritesPage .favoritesList{
+    margin-top: 2rem;
+    padding: 0px 1.5rem;
+}
+.favoriteItem{
+    margin: 1rem 0px;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+.favoriteImg{
+    width: 80px;
+    height: 80px;
+    border-radius: 100%;
+    object-fit: cover;
+}
+.favoriteName{
+    max-width: 160px;
+}

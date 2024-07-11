@@ -6,7 +6,9 @@ import Details from "./Details";
 import defaultPoster from "../assets/default-movie.png";
 import swipeGif from "../assets/swipe.gif";
 
-//import { database, ref, push } from '../firebase';
+//Firebase Database
+import { db } from "../firebase";
+import { collection, addDoc } from "firebase/firestore";
 
 const SwipeComponent = () => {
   const [movies, setMovies] = useState([]);
@@ -18,6 +20,9 @@ const SwipeComponent = () => {
 
   const TMDB_API_KEY = process.env.REACT_APP_TMDB_API;
   const TMDB_API_TOKEN = process.env.REACT_APP_TMDB_TOKEN;
+
+  //Movies Reference for DB
+  const moviesCollection = collection(db, "liked");
 
   const options = useMemo(
     () => ({
@@ -85,12 +90,22 @@ const SwipeComponent = () => {
     }, 500);
   };
 
-  const handleSwipe = (direction, movie) => {
+  const handleSwipe = async (direction, movie) => {
     if (direction === "left") {
       setSwipedLeftMovies((prevMovies) => [...prevMovies, movie]);
       //ADD TO FIREBASE 'MOVIES'
-      // const moviesRef = ref(database, 'movies');
-      // push(moviesRef, movie);
+      // ADD TO FIREBASE 'MOVIES'
+    try {
+      await addDoc(moviesCollection, {
+        name: movie.title, 
+        tmdbID: movie.id,
+        year: new Date(movie.release_date).getFullYear(),
+        image: `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
+      });
+      console.log("Movie added to Firestore:", movie.title);
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
     }
     setTimeout(() => {
       document.body.classList.remove("liked-movie", "disliked-movie");
