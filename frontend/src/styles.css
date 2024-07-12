@@ -27,6 +27,10 @@ body.disliked-movie {
   background: #e76f51;
 }
 
+.app {
+  margin-bottom: 6rem;
+}
+
 h1,
 h2,
 h3,
