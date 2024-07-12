@@ -5,6 +5,8 @@ import Home from "./pages/Home";
 import Favorite from "./pages/Favorite";
 import Watched from "./pages/Watched";
 import Footer from "./components/Footer";
+import WatchParty from "./components/WatchParty";
+
 
 const App = () => {
   return (
@@ -14,6 +16,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/favorites" element={<Favorite />} />
           <Route path="/watched" element={<Watched />} />
+          <Route path="/watchparty/" element={<WatchParty />} />
           {/* <Route path="/detail/:id" element={<Detail />} /> */}
         </Routes>
         <Footer />
