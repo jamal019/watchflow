@@ -87,3 +87,26 @@
     text-align: left;
     margin-left: 1rem;
 }
+
+.create-watchparty {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .create-watchparty button {
+    padding: 10px 20px;
+    background-color: #e05a47;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 16px;
+  }
+  
+  .create-watchparty button:hover {
+    background-color: #ff4500;
+  }
