@@ -161,6 +161,7 @@ const SwipeComponent = () => {
                 movie={movie}
                 onClick={() => handleDetailsClick(movie.id)}
                 onSwipe={handleSwipe}
+                fetchMovies={fetchMovies}
               />
             ))
           )}

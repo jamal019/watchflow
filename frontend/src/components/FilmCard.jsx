@@ -8,7 +8,7 @@ import {
 import { useEffect } from "react";
 import defaultPoster from "../assets/default-movie.png";
 
-const FilmCard = ({ movie, onClick, onSwipe }) => {
+const FilmCard = ({ movie, onClick, onSwipe, fetchMovies }) => {
   const motionValue = useMotionValue(0);
   const rotateValue = useTransform(motionValue, [-300, 300], [-20, 20]);
   const opacityValue = useTransform(
@@ -45,8 +45,12 @@ const FilmCard = ({ movie, onClick, onSwipe }) => {
       });
     }
     console.log(document.querySelectorAll(".film-card").length);
-    if (document.querySelectorAll(".film-card").length <= 1) {
-      document.querySelector(".swiped-left-movies").classList.add("reveal");
+    const filmCards = document.querySelectorAll(".film-card");
+    const swipedLeftMovies = document.querySelector(".swiped-left-movies");
+    if (filmCards.length <= 1 && !swipedLeftMovies) {
+      fetchMovies(); 
+    } else if (filmCards.length <= 1 && swipedLeftMovies) {
+      swipedLeftMovies.classList.add("reveal");
     }
   };
 
