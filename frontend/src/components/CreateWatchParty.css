@@ -1,0 +1,65 @@
+.create-watchparty-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .create-watchparty-form {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    gap: 10px;
+  }
+  
+  .create-watchparty-form input {
+    padding: 10px;
+    font-size: 16px;
+  }
+  
+  .create-watchparty-form button {
+    padding: 10px;
+    font-size: 16px;
+    background-color: #FF6347;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .create-watchparty-form button:hover {
+    background-color: #FF4500;
+  }
+  
+  .party-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .party-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .party-item h2 {
+    margin: 0;
+  }
+  
+  .party-item p {
+    margin: 0;
+  }
+  
+  .party-item button {
+    padding: 5px 10px;
+    margin-top: 5px;
+    cursor: pointer;
+  }
+  
+  .party-details {
+    margin-top: 20px;
+  }
+  
