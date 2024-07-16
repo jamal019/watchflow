@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { db } from "../firebase";
+import { collection, addDoc, doc, setDoc } from "firebase/firestore";
 import "./CreateWatchParty.css";
 
 const CreateWatchParty = () => {
   const { movieId } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
   const [partyName, setPartyName] = useState("");
   const [partyDate, setPartyDate] = useState("");
   const [partyTime, setPartyTime] = useState("");
@@ -63,9 +64,8 @@ const CreateWatchParty = () => {
       });
   }, [movieId, TMDB_API_TOKEN]);
 
-  const handleCreateParty = () => {
+  const handleCreateParty = async () => {
     const newParty = {
-      id: Date.now().toString(),
       name: partyName,
       date: partyDate,
       time: partyTime,
@@ -77,13 +77,14 @@ const CreateWatchParty = () => {
       moviePoster: movieDetails?.poster_path
     };
 
-    const parties = JSON.parse(localStorage.getItem("watchParties")) || [];
-    parties.push(newParty);
-    localStorage.setItem("watchParties", JSON.stringify(parties));
-    setPartyName("");
-    setPartyDate("");
-    setPartyTime("");
-    navigate("/watchparty");
+    try {
+      const docRef = await addDoc(collection(db, "watchParties"), newParty);
+      console.log("Watch party created successfully:", newParty);
+      navigate(`/watchparty/${docRef.id}`); // Navigate to the newly created watch party's detail page
+    } catch (error) {
+      console.error("Error creating watch party:", error);
+      setError(error);
+    }
   };
 
   return (

@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { db } from "../firebase";
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import "./WatchParty.css";
 
 const WatchParty = () => {
   const [watchParties, setWatchParties] = useState([]);
 
-  const fetchWatchParties = () => {
-    const parties = JSON.parse(localStorage.getItem("watchParties")) || [];
-    setWatchParties(parties);
-  };
-
   useEffect(() => {
-    fetchWatchParties();
+    const partiesCollection = collection(db, "watchParties");
+    const unsubscribe = onSnapshot(partiesCollection, (snapshot) => {
+      const partyList = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setWatchParties(partyList);
+    });
+    return () => unsubscribe();
   }, []);
 
   const formatDate = (date) => {
@@ -27,7 +32,7 @@ const WatchParty = () => {
           <div key={party.id} className="party-item">
             <Link to={`/watchparty/${party.id}`}>
               <h2>{party.name}</h2>
-              <p>{formatDate(party.date)} at {party.time}</p>
+              <p>{formatDate(party.date)} um {party.time}</p>
               <p>{party.movieTitle}</p>
             </Link>
           </div>

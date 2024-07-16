@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { db } from "../firebase";
-import { collection, doc, getDoc, setDoc, onSnapshot, addDoc, serverTimestamp, query, orderBy } from "firebase/firestore";
+import { collection, doc, getDoc, setDoc, onSnapshot, addDoc, serverTimestamp, query, orderBy, deleteDoc } from "firebase/firestore";
 import "./WatchPartyDetails.css";
 import Chat from "./Chat"; 
 
@@ -15,11 +15,19 @@ const WatchPartyDetails = () => {
   const [newMessage, setNewMessage] = useState("");
 
   useEffect(() => {
-    const parties = JSON.parse(localStorage.getItem("watchParties")) || [];
-    const party = parties.find((party) => party.id === partyId);
-    setPartyDetails(party);
+    const fetchPartyDetails = async () => {
+      const partyRef = doc(db, "watchParties", partyId);
+      const partySnap = await getDoc(partyRef);
+      if (partySnap.exists()) {
+        setPartyDetails(partySnap.data());
+        console.log("Party details fetched successfully:", partySnap.data());
+      } else {
+        console.error("No such document!");
+      }
+    };
 
-    // Fetch notes from Firestore
+    fetchPartyDetails();
+
     const notesRef = doc(db, "watchParties", partyId);
     getDoc(notesRef).then((docSnap) => {
       if (docSnap.exists()) {
@@ -27,7 +35,6 @@ const WatchPartyDetails = () => {
       }
     });
 
-    // Fetch messages from Firestore
     const messagesRef = collection(db, `watchParties/${partyId}/messages`);
     const q = query(messagesRef, orderBy("timestamp", "asc"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -37,10 +44,9 @@ const WatchPartyDetails = () => {
     return () => unsubscribe();
   }, [partyId]);
 
-  const handleDeleteParty = () => {
-    const parties = JSON.parse(localStorage.getItem("watchParties")) || [];
-    const updatedParties = parties.filter((party) => party.id !== partyId);
-    localStorage.setItem("watchParties", JSON.stringify(updatedParties));
+  const handleDeleteParty = async () => {
+    const partyRef = doc(db, "watchParties", partyId);
+    await deleteDoc(partyRef);
     navigate("/watchparty");
   };
 
@@ -118,7 +124,7 @@ const WatchPartyDetails = () => {
 
         <div className="button-container">
           <button onClick={() => setShowConfirmDelete(true)} className="watchpartydetails-button">Delete Watch Party</button>
-          <button onClick={() => setShowConfirmDelete(true)} className="watchpartydetails-button">Invite to Watch Party</button>
+          <button className="watchpartydetails-button">Invite to Watch Party</button>
         </div>
 
         {showConfirmDelete && (

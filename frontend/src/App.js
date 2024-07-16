@@ -8,6 +8,9 @@ import WatchParty from "./components/WatchParty";
 import Profile from "./components/Profile";
 import CreateWatchParty from "./components/CreateWatchParty";
 import WatchPartyDetails from "./components/WatchPartyDetails";  
+import WatchPartyAdmin from "./components/WatchPartyAdmin"; 
+
+
 
 const App = () => {
   const [activePage, setActivePage] = useState("/");
@@ -27,6 +30,7 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/create-watchparty/:movieId" element={<CreateWatchParty />} /> 
           <Route path="/watchparty/:partyId" element={<WatchPartyDetails />} />
+          <Route path="/watchparty-admin" element={<WatchPartyAdmin />} />
 
           {/* <Route path="/detail/:id" element={<Detail />} /> */}
         </Routes>
