@@ -1,0 +1,140 @@
+.details-page {
+    padding: 20px;
+    color: white;
+}
+  
+.modal-details-video-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+}
+  
+.modal-details-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+  
+.providers ul {
+    list-style-type: none;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 2rem;
+    padding: 0;
+}
+  
+.button-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+  
+.watchpartydetails-button {
+    padding: 10px;
+    background-color: #e05a47;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+  
+.confirm-delete-dialog {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #444;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+  
+.confirm-button,
+.cancel-button {
+    margin: 10px;
+    padding: 10px;
+    cursor: pointer;
+}
+  
+.confirm-button {
+    background-color: #e05a47;
+    color: white;
+    border: none;
+}
+  
+.cancel-button {
+    background-color: #ccc;
+    color: black;
+    border: none;
+}
+  
+.notes-section {
+    margin-top: 10px;
+    border-radius: 5px;
+}
+  
+.notes-section textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    resize: none;
+}
+  
+.save-notes-button {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #e05a47;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+  
+.chat-section {
+    margin-top: 20px;
+}
+  
+.chat-messages {
+    max-height: 200px;
+    overflow-y: scroll;
+    background-color: #444;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+  
+.chat-message {
+    background-color: #555;
+    padding: 5px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+  
+.chat-input {
+    display: flex;
+    gap: 10px;
+}
+  
+.chat-input input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+  
+.chat-input button {
+    padding: 10px;
+    background-color: #e05a47;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

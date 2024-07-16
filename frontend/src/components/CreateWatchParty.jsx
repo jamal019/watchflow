@@ -1,22 +1,67 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import "./CreateWatchParty.css";
 
 const CreateWatchParty = () => {
   const { movieId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [partyName, setPartyName] = useState("");
   const [partyDate, setPartyDate] = useState("");
   const [partyTime, setPartyTime] = useState("");
-  const [movieTitle, setMovieTitle] = useState("");
   const [error, setError] = useState(null);
+  const [movieDetails, setMovieDetails] = useState(null);
+  const [trailerKey, setTrailerKey] = useState(null);
+  const [provider, setProvider] = useState(null);
+
+  const TMDB_API_TOKEN = process.env.REACT_APP_TMDB_TOKEN;
 
   useEffect(() => {
-    // Fetch movie title based on movieId (simulate fetching for now)
-    const movies = JSON.parse(localStorage.getItem("movies")) || [];
-    const movie = movies.find(m => m.id === movieId);
-    setMovieTitle(movie ? movie.title : "Unknown Movie Title");
-  }, [movieId]);
+    fetch(`https://api.themoviedb.org/3/movie/${movieId}`, {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${TMDB_API_TOKEN}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setMovieDetails(data);
+        fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos`, {
+          method: "GET",
+          headers: {
+            accept: "application/json",
+            Authorization: `Bearer ${TMDB_API_TOKEN}`,
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            const trailers = data.results.filter(video => video.site === "YouTube" && video.type === "Trailer");
+            if (trailers.length > 0) {
+              setTrailerKey(trailers[0].key);
+            }
+          });
+
+        fetch(`https://api.themoviedb.org/3/movie/${movieId}/watch/providers`, {
+          method: "GET",
+          headers: {
+            accept: "application/json",
+            Authorization: `Bearer ${TMDB_API_TOKEN}`,
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            const res = data.results["DE"];
+            if (res) {
+              setProvider(res);
+            }
+          });
+      })
+      .catch((error) => {
+        console.error("Error fetching movie details:", error);
+        setError(error);
+      });
+  }, [movieId, TMDB_API_TOKEN]);
 
   const handleCreateParty = () => {
     const newParty = {
@@ -25,7 +70,11 @@ const CreateWatchParty = () => {
       date: partyDate,
       time: partyTime,
       movieId: movieId,
-      movieTitle: movieTitle
+      movieTitle: movieDetails?.title || "Unknown Movie Title",
+      movieOverview: movieDetails?.overview || "No overview available",
+      trailerKey: trailerKey,
+      provider: provider,
+      moviePoster: movieDetails?.poster_path
     };
 
     const parties = JSON.parse(localStorage.getItem("watchParties")) || [];

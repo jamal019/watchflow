@@ -1,55 +1,38 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./WatchParty.css";
 
 const WatchParty = () => {
-  const { partyId } = useParams();
   const [watchParties, setWatchParties] = useState([]);
-  const [partyDetails, setPartyDetails] = useState(null);
 
   const fetchWatchParties = () => {
     const parties = JSON.parse(localStorage.getItem("watchParties")) || [];
     setWatchParties(parties);
   };
 
-  const handleDeleteParty = (id) => {
-    const parties = JSON.parse(localStorage.getItem("watchParties")) || [];
-    const updatedParties = parties.filter((party) => party.id !== id);
-    localStorage.setItem("watchParties", JSON.stringify(updatedParties));
-    fetchWatchParties();
-  };
-
-  const handleJoinParty = (party) => {
-    setPartyDetails(party);
-  };
-
   useEffect(() => {
     fetchWatchParties();
   }, []);
 
+  const formatDate = (date) => {
+    const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+    return new Date(date).toLocaleDateString("de-DE", options);
+  };
+
   return (
     <div className="watchparty-page">
-      <h1>WatchParties</h1>
+      <h1>My WatchParties</h1>
       <div className="party-list">
         {watchParties.map((party) => (
           <div key={party.id} className="party-item">
-            <h2>{party.name}</h2>
-            <p>{party.date} at {party.time}</p>
-            <p>{party.movieTitle}</p>
-            <button onClick={() => handleJoinParty(party)}>Join Party</button>
-            <button onClick={() => handleDeleteParty(party.id)}>Delete</button>
+            <Link to={`/watchparty/${party.id}`}>
+              <h2>{party.name}</h2>
+              <p>{formatDate(party.date)} at {party.time}</p>
+              <p>{party.movieTitle}</p>
+            </Link>
           </div>
         ))}
       </div>
-      {partyDetails && (
-        <div className="party-details">
-          <h2>{partyDetails.name}</h2>
-          <p>{partyDetails.date} at {partyDetails.time}</p>
-          <p>Movie: {partyDetails.movieTitle}</p>
-          <p>Participants: {partyDetails.participants ? partyDetails.participants.join(", ") : "None"}</p>
-          {/* Add chat component and other details */}
-        </div>
-      )}
     </div>
   );
 };
