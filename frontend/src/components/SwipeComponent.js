@@ -2,13 +2,10 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import "./SwipeComponent.css";
 import FilmCard from "./FilmCard";
 import Details from "./Details";
-
 import defaultPoster from "../assets/default-movie.png";
 import swipeGif from "../assets/swipe.gif";
-
-//Firebase Database
 import { db } from "../firebase";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, /*addDoc*/ writeBatch, doc } from "firebase/firestore";
 
 const SwipeComponent = () => {
   const [movies, setMovies] = useState([]);
@@ -21,8 +18,7 @@ const SwipeComponent = () => {
   const TMDB_API_KEY = process.env.REACT_APP_TMDB_API;
   const TMDB_API_TOKEN = process.env.REACT_APP_TMDB_TOKEN;
 
-  //Movies Reference for DB
-  const moviesCollection = collection(db, "liked");
+  //const moviesCollection = collection(db, "liked");
 
   const options = useMemo(
     () => ({
@@ -48,35 +44,51 @@ const SwipeComponent = () => {
           setMovies(data.results);
         }
         setLoading(false);
-        //console.log(data, randNum);
+      })
+      .catch((error) => {
+        console.error("Error fetching movies:", error);
+        setLoading(false);
       });
   }, [TMDB_API_KEY, options]);
 
-  const fetchSimilarMovies = useCallback((movieId) => {
-    setLoading(true);
-    setShowLoader(true);
-    fetch(
-      `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${TMDB_API_KEY}`,
-      options
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        if (data && data.results) {
-          setMovies(data.results);
-        }
-        setLoading(false);
-        setTimeout(() => {
+  const fetchSimilarMovies = useCallback(
+    (movieId) => {
+      setLoading(true);
+      setShowLoader(true);
+      fetch(
+        `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${TMDB_API_KEY}`,
+        options
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          if (data && data.results) {
+            setMovies(data.results);
+          }
+          setLoading(false);
           setShowLoader(false);
-        }, 3000); 
-      });
-  }, [TMDB_API_KEY, options]);
+        })
+        .catch((error) => {
+          console.error("Error fetching similar movies:", error);
+          setLoading(false);
+          setShowLoader(false);
+        });
+    },
+    [TMDB_API_KEY, options]
+  );
 
   useEffect(() => {
+    const storedSwipedLeftMovies = loadSwipedLeftMoviesFromLocalStorage();
+    if (storedSwipedLeftMovies.length > 0) {
+      setSwipedLeftMovies(storedSwipedLeftMovies);
+    }
     fetchMovies();
   }, [fetchMovies]);
 
+  useEffect(() => {
+    saveSwipedLeftMoviesToLocalStorage(swipedLeftMovies);
+  }, [swipedLeftMovies]);
+
   const handleDetailsClick = (movieId) => {
-    console.log("Card clicked: ", movieId);
     setSelectedMovieId(movieId);
     document.querySelector("body").classList.add("no-scroll");
   };
@@ -93,19 +105,20 @@ const SwipeComponent = () => {
   const handleSwipe = async (direction, movie) => {
     if (direction === "left") {
       setSwipedLeftMovies((prevMovies) => [...prevMovies, movie]);
-      //ADD TO FIREBASE 'MOVIES'
-      // ADD TO FIREBASE 'MOVIES'
-    try {
-      await addDoc(moviesCollection, {
-        name: movie.title, 
-        tmdbID: movie.id,
-        year: new Date(movie.release_date).getFullYear(),
-        image: `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
-      });
-      console.log("Movie added to Firestore:", movie.title);
-    } catch (error) {
-      console.error("Error adding document: ", error);
-    }
+      try {
+        const batch = writeBatch(db);
+        const movieDocRef = doc(collection(db, "liked"));
+        batch.set(movieDocRef, {
+          name: movie.title,
+          tmdbID: movie.id,
+          year: new Date(movie.release_date).getFullYear(),
+          image: `https://image.tmdb.org/t/p/w500/${movie.poster_path}`,
+        });
+        await batch.commit();
+        console.log("Movie added to Firestore:", movie.title);
+      } catch (error) {
+        console.error("Error adding document: ", error);
+      }
     }
     setTimeout(() => {
       document.body.classList.remove("liked-movie", "disliked-movie");
@@ -115,37 +128,41 @@ const SwipeComponent = () => {
 
   const handleMovieImageClick = (movieId) => {
     fetchSimilarMovies(movieId);
-    setSwipedLeftMovies([]); // Clear swiped left movies for new round
+    setSwipedLeftMovies([]);
   };
 
   const handleImageError = (event) => {
     event.target.src = defaultPoster;
   };
 
+  const saveSwipedLeftMoviesToLocalStorage = (movies) => {
+    localStorage.setItem("swipedLeftMovies", JSON.stringify(movies));
+  };
+
+  const loadSwipedLeftMoviesFromLocalStorage = () => {
+    const movies = localStorage.getItem("swipedLeftMovies");
+    return movies ? JSON.parse(movies) : [];
+  };
+
   const addFadeOutClass = () => {
     const swipeLoader = document.getElementById("swipeloader");
     if (swipeLoader) {
       swipeLoader.classList.add("fadeOut");
-    } else {
-      requestAnimationFrame(addFadeOutClass);
     }
   };
 
-  setTimeout(() => {
-    requestAnimationFrame(addFadeOutClass);
-  }, 3000);
+  setTimeout(addFadeOutClass, 3000);
 
   return (
     <>
-        <div id="swipeloader">
-          <img src={swipeGif} alt="swipe gif" />
-        </div>
+      <div id="swipeloader">
+        <img src={swipeGif} alt="swipe gif" />
+      </div>
       {showLoader && (
         <div id="swipeloader">
           <img src={swipeGif} alt="swipe gif" />
         </div>
       )}
-
       <section className="swipe-page">
         <div className="swipe-thumbs">
           <span>👍🏼</span>
@@ -168,8 +185,14 @@ const SwipeComponent = () => {
         </div>
       </section>
       {selectedMovieId && (
-        <div className={`modal-details ${isClosing ? "hide" : ""}`} onClick={closeDetails}>
-          <div className="modal-details-content" onClick={(e) => e.stopPropagation()}>
+        <div
+          className={`modal-details ${isClosing ? "hide" : ""}`}
+          onClick={closeDetails}
+        >
+          <div
+            className="modal-details-content"
+            onClick={(e) => e.stopPropagation()}
+          >
             <p className="close-details" onClick={closeDetails}>
               &times;
             </p>
@@ -189,9 +212,8 @@ const SwipeComponent = () => {
                   className="swiped-left-movies-img"
                   src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
                   alt={movie.id}
-                  onClick={() => handleMovieImageClick(movie.id)} // Add click handler
+                  onClick={() => handleMovieImageClick(movie.id)}
                 />
-                {/* <li>{movie.title}</li> */}
               </div>
             ))}
           </ul>

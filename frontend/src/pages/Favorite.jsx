@@ -1,32 +1,33 @@
-// src/pages/Favorite.js
-import React from "react";
-import { useState, useEffect } from "react";
-import {db} from "../firebase";
-import {collection,getDocs,deleteDoc,doc} from "firebase/firestore";
-
+import React, { useState, useEffect } from "react";
+import { db } from "../firebase";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import "./Favorite.css";
 import Details from "../components/Details";
 
 const Favorite = () => {
-
-  const [selectedMovieId,setSelectedMovieId] = useState(null);
+  const [selectedMovieId, setSelectedMovieId] = useState(null);
   const [isClosing, setIsClosing] = useState(false);
+  const [favorites, setFavorites] = useState([]);
 
-  const [favorites,setFavorites] = useState();
-
-  const favoritesCollection = collection(db,"liked");
+  const favoritesCollection = collection(db, "liked");
 
   const getFavorites = async () => {
-    const data = await getDocs(favoritesCollection);
-    setFavorites(data.docs.map((val) => ({...val.data(), id:val.id})));
-  }
+    const cachedFavorites = localStorage.getItem("favorites");
+    if (cachedFavorites) {
+      setFavorites(JSON.parse(cachedFavorites));
+    } else {
+      const data = await getDocs(favoritesCollection);
+      const favoriteMovies = data.docs.map((val) => ({ ...val.data(), id: val.id }));
+      setFavorites(favoriteMovies);
+      localStorage.setItem("favorites", JSON.stringify(favoriteMovies));
+    }
+  };
 
   useEffect(() => {
     getFavorites();
-  });
+  }, []);
 
   const handleDetailsClick = (movieId) => {
-    //console.log("Card clicked: ", movieId);
     setSelectedMovieId(movieId);
     document.querySelector("body").classList.add("no-scroll");
   };
@@ -43,44 +44,59 @@ const Favorite = () => {
   const handleDelete = async (id) => {
     const movieDoc = doc(db, "liked", id);
     await deleteDoc(movieDoc);
-    setFavorites(favorites.filter((fav) => fav.id !== id));
+    const updatedFavorites = favorites.filter((fav) => fav.id !== id);
+    setFavorites(updatedFavorites);
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
   };
-
 
   return (
     <>
-    <div className="favoritesPage">
-      <h1>Favorites</h1>
-      <div className="favoritesWrap">
-      {favorites && favorites.map((fav) => {
-        return(
-          <div id={fav.tmdbID} key={fav.tmdbID} className="favoritesList">
-            <div className="favoriteItem">
-              <img onClick={() => handleDetailsClick(fav.tmdbID)} className="favoriteImg" src={fav.image} alt={fav.image}/>
-              <p className="favoriteName">{fav.name}, {fav.year}</p>
+      <div className="favoritesPage">
+        <h1>Favorites</h1>
+        <div className="favoritesWrap">
+          {favorites.map((fav) => (
+            <div id={fav.tmdbID} key={fav.tmdbID} className="favoritesList">
+              <div className="favoriteItem">
+                <img
+                  onClick={() => handleDetailsClick(fav.tmdbID)}
+                  className="favoriteImg"
+                  src={fav.image}
+                  alt={fav.image}
+                />
+                <p className="favoriteName">{fav.name}, {fav.year}</p>
+              </div>
+              <div className="actions">
+                <span className="watched">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path
+                      fill="white"
+                      d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM337 209L209 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L303 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+                    />
+                  </svg>
+                </span>
+                <span onClick={() => handleDelete(fav.id)} className="delete">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path
+                      fill="white"
+                      d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"
+                    />
+                  </svg>
+                </span>
+              </div>
             </div>
-            <div className="actions">
-              <span className="watched"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="white" d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM337 209L209 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L303 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg></span>
-              <span onClick={() => handleDelete(fav.id)} className="delete"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="white" d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/></svg></span>
-            </div>
-          </div>          
-        )
-      })}
+          ))}
+        </div>
       </div>
-    </div>
-
-    {selectedMovieId && (
+      {selectedMovieId && (
         <div className={`modal-details ${isClosing ? "hide" : ""}`} onClick={closeDetails}>
           <div className="modal-details-content" onClick={(e) => e.stopPropagation()}>
             <p className="close-details" onClick={closeDetails}>
               &times;
             </p>
-            {/* <p>WatchParty</p> */}
             <Details movieId={selectedMovieId} />
           </div>
         </div>
       )}
-
     </>
   );
 };
