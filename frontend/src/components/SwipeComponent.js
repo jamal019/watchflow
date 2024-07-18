@@ -2,10 +2,13 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import "./SwipeComponent.css";
 import FilmCard from "./FilmCard";
 import Details from "./Details";
+
 import defaultPoster from "../assets/default-movie.png";
 import swipeGif from "../assets/swipe.gif";
+
+//Firebase Database
 import { db } from "../firebase";
-import { collection, /*addDoc*/ writeBatch, doc } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
 
 const SwipeComponent = () => {
   const [movies, setMovies] = useState([]);
@@ -18,7 +21,8 @@ const SwipeComponent = () => {
   const TMDB_API_KEY = process.env.REACT_APP_TMDB_API;
   const TMDB_API_TOKEN = process.env.REACT_APP_TMDB_TOKEN;
 
-  //const moviesCollection = collection(db, "liked");
+  //Movies Reference for DB
+  const moviesCollection = collection(db, "liked");
 
   const options = useMemo(
     () => ({
@@ -44,10 +48,7 @@ const SwipeComponent = () => {
           setMovies(data.results);
         }
         setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching movies:", error);
-        setLoading(false);
+        //console.log(data, randNum);
       });
   }, [TMDB_API_KEY, options]);
 
@@ -65,36 +66,26 @@ const SwipeComponent = () => {
             setMovies(data.results);
           }
           setLoading(false);
-          setShowLoader(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching similar movies:", error);
-          setLoading(false);
-          setShowLoader(false);
+          setTimeout(() => {
+            setShowLoader(false);
+          }, 3000);
         });
     },
     [TMDB_API_KEY, options]
   );
 
   useEffect(() => {
-    const storedSwipedLeftMovies = loadSwipedLeftMoviesFromLocalStorage();
-    if (storedSwipedLeftMovies.length > 0) {
-      setSwipedLeftMovies(storedSwipedLeftMovies);
-    }
     fetchMovies();
   }, [fetchMovies]);
 
-  useEffect(() => {
-    saveSwipedLeftMoviesToLocalStorage(swipedLeftMovies);
-  }, [swipedLeftMovies]);
-
   const handleDetailsClick = (movieId) => {
+    console.log("Card clicked: ", movieId);
     setSelectedMovieId(movieId);
-    document.querySelector("body").classList.add("no-scroll");
+    //document.querySelector("body").classList.add("no-scroll");
   };
 
   const closeDetails = () => {
-    document.querySelector("body").classList.remove("no-scroll");
+    //document.querySelector("body").classList.remove("no-scroll");
     setIsClosing(true);
     setTimeout(() => {
       setSelectedMovieId(null);
@@ -105,16 +96,22 @@ const SwipeComponent = () => {
   const handleSwipe = async (direction, movie) => {
     if (direction === "left") {
       setSwipedLeftMovies((prevMovies) => [...prevMovies, movie]);
+      // Save to localStorage
+      const storedSwipedLeftMovies =
+        JSON.parse(localStorage.getItem("swipedLeftMovies")) || [];
+      const updatedSwipedLeftMovies = [...storedSwipedLeftMovies, movie];
+      localStorage.setItem(
+        "swipedLeftMovies",
+        JSON.stringify(updatedSwipedLeftMovies)
+      );
+      // Save to Firestore
       try {
-        const batch = writeBatch(db);
-        const movieDocRef = doc(collection(db, "liked"));
-        batch.set(movieDocRef, {
+        await addDoc(moviesCollection, {
           name: movie.title,
           tmdbID: movie.id,
           year: new Date(movie.release_date).getFullYear(),
           image: `https://image.tmdb.org/t/p/w500/${movie.poster_path}`,
         });
-        await batch.commit();
         console.log("Movie added to Firestore:", movie.title);
       } catch (error) {
         console.error("Error adding document: ", error);
@@ -128,30 +125,25 @@ const SwipeComponent = () => {
 
   const handleMovieImageClick = (movieId) => {
     fetchSimilarMovies(movieId);
-    setSwipedLeftMovies([]);
+    setSwipedLeftMovies([]); // Clear swiped left movies for new round
   };
 
   const handleImageError = (event) => {
     event.target.src = defaultPoster;
   };
 
-  const saveSwipedLeftMoviesToLocalStorage = (movies) => {
-    localStorage.setItem("swipedLeftMovies", JSON.stringify(movies));
-  };
-
-  const loadSwipedLeftMoviesFromLocalStorage = () => {
-    const movies = localStorage.getItem("swipedLeftMovies");
-    return movies ? JSON.parse(movies) : [];
-  };
-
   const addFadeOutClass = () => {
     const swipeLoader = document.getElementById("swipeloader");
     if (swipeLoader) {
       swipeLoader.classList.add("fadeOut");
+    } else {
+      requestAnimationFrame(addFadeOutClass);
     }
   };
 
-  setTimeout(addFadeOutClass, 3000);
+  setTimeout(() => {
+    requestAnimationFrame(addFadeOutClass);
+  }, 3000);
 
   return (
     <>
@@ -163,6 +155,7 @@ const SwipeComponent = () => {
           <img src={swipeGif} alt="swipe gif" />
         </div>
       )}
+
       <section className="swipe-page">
         <div className="swipe-thumbs">
           <span>👍🏼</span>
@@ -178,7 +171,6 @@ const SwipeComponent = () => {
                 movie={movie}
                 onClick={() => handleDetailsClick(movie.id)}
                 onSwipe={handleSwipe}
-                fetchMovies={fetchMovies}
               />
             ))
           )}
