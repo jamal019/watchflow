@@ -3,8 +3,7 @@ footer div span {
     display: inline-block;
   }
   
-  footer div span.active {
-    background-color: #ff4500;
-    border-radius: 100%;
+  footer div span.active > svg path{
+    fill: #171515;
   }
   
