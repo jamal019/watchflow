@@ -4,6 +4,8 @@ import { db } from "../firebase";
 import { collection, doc, getDoc, setDoc, onSnapshot, addDoc, serverTimestamp, query, orderBy, deleteDoc } from "firebase/firestore";
 import "./WatchPartyDetails.css";
 import Chat from "./Chat"; 
+import debounce from 'lodash/debounce';
+
 
 const WatchPartyDetails = () => {
   const { partyId } = useParams();
@@ -50,9 +52,15 @@ const WatchPartyDetails = () => {
     navigate("/watchparty");
   };
 
-  const handleSaveNotes = async () => {
+  const saveNotes = debounce(async (newNotes) => {
     const notesRef = doc(db, "watchParties", partyId);
-    await setDoc(notesRef, { notes }, { merge: true });
+    await setDoc(notesRef, { notes: newNotes }, { merge: true });
+  }, 1000); // Adjust the debounce delay as needed
+
+  const handleNotesChange = (e) => {
+    const newNotes = e.target.value;
+    setNotes(newNotes);
+    saveNotes(newNotes);
   };
 
   const handleSendMessage = async () => {
@@ -79,7 +87,7 @@ const WatchPartyDetails = () => {
     <section className="details-page watchparty-details-page">
       <div className="modal-details-text">
         <h2>{partyDetails.name}</h2>
-        <p>{formatDate(partyDetails.date)} um {partyDetails.time}</p>
+        <h3>Movie: {partyDetails.movieTitle}</h3>
         {partyDetails.trailerKey ? (
           <div className="modal-details-video-container">
             <iframe
@@ -97,8 +105,8 @@ const WatchPartyDetails = () => {
         ) : (
           <p>Trailer not available</p>
         )}
-        <p>Movie: {partyDetails.movieTitle}</p>
         <p>{partyDetails.movieOverview}</p>
+        <h4>Party Time: {formatDate(partyDetails.date)} at {partyDetails.time}</h4>
         <h3>Where to watch</h3>
         <div className="providers">
           {partyDetails.provider && partyDetails.provider.flatrate && partyDetails.provider.flatrate.length > 0 ? (
@@ -135,13 +143,12 @@ const WatchPartyDetails = () => {
           </div>
         )}
 
-        <div className="notes-section">
+<div className="notes-section">
           <textarea
             value={notes}
-            onChange={(e) => setNotes(e.target.value)}
+            onChange={handleNotesChange}
             placeholder="Enter your notes here..."
           ></textarea>
-          <button onClick={handleSaveNotes} className="save-notes-button">Save Notes</button>
         </div>
 
         <Chat partyId={partyId} />

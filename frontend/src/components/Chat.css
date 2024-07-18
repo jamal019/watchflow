@@ -2,7 +2,8 @@
     background-color: #333;
     border-radius: 5px;
     padding: 10px;
-    margin-top: 20px;
+    margin-top: 15px;
+    border: 1px solid #e05a47;
   }
   
   .chat-messages {
@@ -39,7 +40,7 @@
     flex: 1;
     padding: 10px;
     border-radius: 5px;
-    border: 1px solid #ccc;
+    border: 1px solid #e05a47;
     background-color: #222;
     color: white;
   }
