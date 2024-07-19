@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./Favorite.css";
 import Details from "../components/Details";
 import { db } from "../firebase";
-import { collection, onSnapshot, deleteDoc, doc } from "firebase/firestore";
+import { collection, onSnapshot, deleteDoc, doc, addDoc } from "firebase/firestore";
+import queryString from 'query-string';
 
 const Favorite = () => {
   const [selectedMovieId, setSelectedMovieId] = useState(null);
@@ -64,6 +65,43 @@ const Favorite = () => {
     await deleteDoc(movieDoc);
   };
 
+  // Function to handle movie watched
+// Function to handle movie watched
+const handleWatched = async (fav) => {
+  // Optimistically update the state and localStorage
+  const updatedFavorites = favorites.filter(f => f.id !== fav.id);
+  setFavorites(updatedFavorites);
+  localStorage.setItem('swipedLeftMovies', JSON.stringify(updatedFavorites));
+
+  try {
+    // Add to "watched" collection
+    await addDoc(collection(db, "watched"), fav);
+
+    // Remove from "favorites" collection
+    const movieDoc = doc(db, "liked", fav.id);
+    await deleteDoc(movieDoc);
+  } catch (error) {
+    console.error("Error moving movie to watched: ", error);
+    // Revert state update in case of an error
+    setFavorites([...updatedFavorites, fav]);
+    localStorage.setItem('swipedLeftMovies', JSON.stringify([...updatedFavorites, fav]));
+  }
+};
+
+  // Function to format movie list for sharing
+  const formatMovieList = (movies) => {
+    return movies.map(movie => `${movie.name} (${movie.year})`).join('\n');
+  };
+
+  // Function to share the movie list on WhatsApp
+  const shareOnWhatsApp = (movies) => {
+    const movieList = formatMovieList(movies);
+    const message = `Check out my favorite movies I'd like to watch:\n\n${movieList}`;
+    const url = `https://api.whatsapp.com/send?${queryString.stringify({ text: message })}`;
+    window.open(url, '_blank');
+  };
+
+
   return (
     <>
       <div className="favoritesPage">
@@ -81,7 +119,7 @@ const Favorite = () => {
                 <p className="favoriteName">{fav.name}, {fav.year}</p>
               </div>
               <div className="actions">
-                <span className="watched">
+                <span onClick={() => handleWatched(fav)} className="watched">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                     <path fill="white" d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM337 209L209 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L303 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/>
                   </svg>
@@ -95,6 +133,8 @@ const Favorite = () => {
             </div>
           ))}
         </div>
+        <br/> <br/>
+        <button className="shareBtn" onClick={() => shareOnWhatsApp(favorites)}>Share on WhatsApp</button>
       </div>
 
       {selectedMovieId && (

@@ -46,3 +46,8 @@
     height: 25px;
     display: block;
 }
+
+.shareBtn{
+    margin: 0 auto;
+    display: block;
+}
