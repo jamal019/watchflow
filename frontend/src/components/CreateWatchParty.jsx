@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { db } from "../firebase";
-import { collection, addDoc, doc, setDoc } from "firebase/firestore";
+import { db, auth } from "../firebase";
+import { collection, addDoc, getDoc, doc } from "firebase/firestore";
 import "./CreateWatchParty.css";
 
 const CreateWatchParty = () => {
@@ -65,6 +65,15 @@ const CreateWatchParty = () => {
   }, [movieId, TMDB_API_TOKEN]);
 
   const handleCreateParty = async () => {
+    const user = auth.currentUser;
+    if (!user) {
+      setError("You must be logged in to create a watch party.");
+      return;
+    }
+
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    const username = userDoc.exists() ? userDoc.data().username : "Unknown User";
+
     const newParty = {
       name: partyName,
       date: partyDate,
@@ -74,7 +83,8 @@ const CreateWatchParty = () => {
       movieOverview: movieDetails?.overview || "No overview available",
       trailerKey: trailerKey,
       provider: provider,
-      moviePoster: movieDetails?.poster_path
+      moviePoster: movieDetails?.poster_path,
+      participants: { [user.uid]: { username, role: "host" } }
     };
 
     try {

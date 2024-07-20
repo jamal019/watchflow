@@ -9,11 +9,16 @@ import Profile from "./components/Profile";
 import CreateWatchParty from "./components/CreateWatchParty";
 import WatchPartyDetails from "./components/WatchPartyDetails";  
 import WatchPartyAdmin from "./components/WatchPartyAdmin"; 
+import InviteHandler from "./components/InviteHandler";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "./firebase";
+
 
 
 
 const App = () => {
   const [activePage, setActivePage] = useState("/");
+  const [user] = useAuthState(auth);
 
   const handlePageChange = (page) => {
     setActivePage(page);
@@ -31,6 +36,8 @@ const App = () => {
           <Route path="/create-watchparty/:movieId" element={<CreateWatchParty />} /> 
           <Route path="/watchparty/:partyId" element={<WatchPartyDetails />} />
           <Route path="/watchparty-admin" element={<WatchPartyAdmin />} />
+          <Route path="/watchparty/:partyId/invite" element={<InviteHandler />} />
+
 
           {/* <Route path="/detail/:id" element={<Detail />} /> */}
         </Routes>

@@ -1,20 +1,23 @@
-// src/pages/Home.js
 import React, { useState, useEffect } from "react";
 import SwipeComponent from "../components/SwipeComponent";
 import Intro from "../components/Intro";
 
 const Home = () => {
   const [showIntro, setShowIntro] = useState(true);
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
     const loggedIn = localStorage.getItem("isLoggedIn");
-    if (loggedIn) {
+    const storedUsername = localStorage.getItem("username");
+    if (loggedIn && storedUsername) {
       setShowIntro(false);
+      setUsername(storedUsername);
     }
   }, []);
 
-  const handleLogin = () => {
+  const handleLogin = (username) => {
     setShowIntro(false);
+    setUsername(username);
   };
 
   return (
@@ -26,7 +29,7 @@ const Home = () => {
         </>
       ) : (
         <>
-          <SwipeComponent />
+          <SwipeComponent username={username} />
         </>
       )}
     </div>

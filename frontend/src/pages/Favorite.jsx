@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Favorite.css";
 import Details from "../components/Details";
-import { db } from "../firebase";
+import { db, auth } from "../firebase";
 import { collection, onSnapshot, deleteDoc, doc, addDoc } from "firebase/firestore";
 import queryString from 'query-string';
 
@@ -10,42 +10,30 @@ const Favorite = () => {
   const [isClosing, setIsClosing] = useState(false);
   const [favorites, setFavorites] = useState([]);
 
-  // Function to retrieve favorites from localStorage
-  const getFavoritesFromLocalStorage = () => {
-    const storedFavorites = JSON.parse(localStorage.getItem('swipedLeftMovies')) || [];
-    setFavorites(storedFavorites);
-  };
-
   useEffect(() => {
-    getFavoritesFromLocalStorage();
+    const fetchFavorites = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const favoritesCollection = collection(db, "users", user.uid, "liked");
+        const unsubscribe = onSnapshot(favoritesCollection, (snapshot) => {
+          const updatedFavorites = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setFavorites(updatedFavorites);
+        });
+        return () => unsubscribe();
+      }
+    };
+
+    fetchFavorites();
   }, []);
 
-  // Function to subscribe to Firestore for real-time updates
-  useEffect(() => {
-    const favoritesCollection = collection(db, "liked");
-    const unsubscribe = onSnapshot(favoritesCollection, (snapshot) => {
-      const updatedFavorites = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setFavorites(updatedFavorites);
-
-      // Update localStorage
-      localStorage.setItem('swipedLeftMovies', JSON.stringify(updatedFavorites));
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  // Function to handle movie details click
   const handleDetailsClick = (movieId) => {
     setSelectedMovieId(movieId);
-    //document.querySelector("body").classList.add("no-scroll");
   };
 
-  // Function to close details modal
   const closeDetails = () => {
-    //document.querySelector("body").classList.remove("no-scroll");
     setIsClosing(true);
     setTimeout(() => {
       setSelectedMovieId(null);
@@ -53,54 +41,44 @@ const Favorite = () => {
     }, 500);
   };
 
-  // Function to handle movie deletion
   const handleDelete = async (id) => {
-    // Remove from localStorage
     const updatedFavorites = favorites.filter(fav => fav.id !== id);
-    localStorage.setItem('swipedLeftMovies', JSON.stringify(updatedFavorites));
     setFavorites(updatedFavorites);
 
-    // Remove from Firestore
-    const movieDoc = doc(db, "liked", id);
-    await deleteDoc(movieDoc);
+    const user = auth.currentUser;
+    if (user) {
+      const movieDoc = doc(db, "users", user.uid, "liked", id);
+      await deleteDoc(movieDoc);
+    }
   };
 
-  // Function to handle movie watched
-// Function to handle movie watched
-const handleWatched = async (fav) => {
-  // Optimistically update the state and localStorage
-  const updatedFavorites = favorites.filter(f => f.id !== fav.id);
-  setFavorites(updatedFavorites);
-  localStorage.setItem('swipedLeftMovies', JSON.stringify(updatedFavorites));
+  const handleWatched = async (fav) => {
+    const updatedFavorites = favorites.filter(f => f.id !== fav.id);
+    setFavorites(updatedFavorites);
 
-  try {
-    // Add to "watched" collection
-    await addDoc(collection(db, "watched"), fav);
+    const user = auth.currentUser;
+    if (user) {
+      try {
+        await addDoc(collection(db, "users", user.uid, "watched"), fav);
+        const movieDoc = doc(db, "users", user.uid, "liked", fav.id);
+        await deleteDoc(movieDoc);
+      } catch (error) {
+        console.error("Error moving movie to watched: ", error);
+        setFavorites([...updatedFavorites, fav]);
+      }
+    }
+  };
 
-    // Remove from "favorites" collection
-    const movieDoc = doc(db, "liked", fav.id);
-    await deleteDoc(movieDoc);
-  } catch (error) {
-    console.error("Error moving movie to watched: ", error);
-    // Revert state update in case of an error
-    setFavorites([...updatedFavorites, fav]);
-    localStorage.setItem('swipedLeftMovies', JSON.stringify([...updatedFavorites, fav]));
-  }
-};
-
-  // Function to format movie list for sharing
   const formatMovieList = (movies) => {
     return movies.map(movie => `${movie.name} (${movie.year})`).join('\n');
   };
 
-  // Function to share the movie list on WhatsApp
   const shareOnWhatsApp = (movies) => {
     const movieList = formatMovieList(movies);
     const message = `Check out my favorite movies I'd like to watch:\n\n${movieList}`;
     const url = `https://api.whatsapp.com/send?${queryString.stringify({ text: message })}`;
     window.open(url, '_blank');
   };
-
 
   return (
     <>

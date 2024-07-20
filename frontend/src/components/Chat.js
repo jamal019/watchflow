@@ -1,13 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { db } from "../firebase"; // Import Firestore instance
-import { collection, addDoc, query, orderBy, onSnapshot, Timestamp } from "firebase/firestore";
+import { db, auth } from "../firebase"; // Import Firestore instance and auth
+import { collection, addDoc, getDoc, doc, query, orderBy, onSnapshot, Timestamp } from "firebase/firestore";
 import "./Chat.css";
 
 const Chat = ({ partyId }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [username, setUsername] = useState("Unknown User");
 
   useEffect(() => {
+    // Get the current user's username
+    const fetchUsername = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if (userDoc.exists()) {
+          setUsername(userDoc.data().username);
+        }
+      }
+    };
+
+    fetchUsername();
+
     const messagesRef = collection(db, `watchParties/${partyId}/messages`);
     const q = query(messagesRef, orderBy("timestamp", "asc"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -29,6 +43,7 @@ const Chat = ({ partyId }) => {
       const messagesRef = collection(db, `watchParties/${partyId}/messages`);
       await addDoc(messagesRef, {
         text: newMessage,
+        username: username,
         timestamp: Timestamp.fromDate(new Date()),
       });
       setNewMessage("");
@@ -40,6 +55,7 @@ const Chat = ({ partyId }) => {
       <div className="chat-messages">
         {messages.map((message) => (
           <div key={message.id} className="chat-message">
+            <span className="chat-username">{message.username}</span>
             <span>{message.text}</span>
             <span className="chat-timestamp">{new Date(message.timestamp).toLocaleTimeString()}</span>
           </div>

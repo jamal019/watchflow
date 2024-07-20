@@ -2,12 +2,9 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import "./SwipeComponent.css";
 import FilmCard from "./FilmCard";
 import Details from "./Details";
-
 import defaultPoster from "../assets/default-movie.png";
 import swipeGif from "../assets/swipe.gif";
-
-//Firebase Database
-import { db } from "../firebase";
+import { db, auth } from "../firebase";
 import { collection, addDoc } from "firebase/firestore";
 
 const SwipeComponent = () => {
@@ -20,9 +17,6 @@ const SwipeComponent = () => {
 
   const TMDB_API_KEY = process.env.REACT_APP_TMDB_API;
   const TMDB_API_TOKEN = process.env.REACT_APP_TMDB_TOKEN;
-
-  //Movies Reference for DB
-  const moviesCollection = collection(db, "liked");
 
   const options = useMemo(
     () => ({
@@ -48,7 +42,6 @@ const SwipeComponent = () => {
           setMovies(data.results);
         }
         setLoading(false);
-        //console.log(data, randNum);
       });
   }, [TMDB_API_KEY, options]);
 
@@ -79,13 +72,10 @@ const SwipeComponent = () => {
   }, [fetchMovies]);
 
   const handleDetailsClick = (movieId) => {
-    console.log("Card clicked: ", movieId);
     setSelectedMovieId(movieId);
-    //document.querySelector("body").classList.add("no-scroll");
   };
 
   const closeDetails = () => {
-    //document.querySelector("body").classList.remove("no-scroll");
     setIsClosing(true);
     setTimeout(() => {
       setSelectedMovieId(null);
@@ -96,7 +86,6 @@ const SwipeComponent = () => {
   const handleSwipe = async (direction, movie) => {
     if (direction === "left") {
       setSwipedLeftMovies((prevMovies) => [...prevMovies, movie]);
-      // Save to localStorage
       const storedSwipedLeftMovies =
         JSON.parse(localStorage.getItem("swipedLeftMovies")) || [];
       const updatedSwipedLeftMovies = [...storedSwipedLeftMovies, movie];
@@ -104,15 +93,19 @@ const SwipeComponent = () => {
         "swipedLeftMovies",
         JSON.stringify(updatedSwipedLeftMovies)
       );
-      // Save to Firestore
       try {
-        await addDoc(moviesCollection, {
-          name: movie.title,
-          tmdbID: movie.id,
-          year: new Date(movie.release_date).getFullYear(),
-          image: `https://image.tmdb.org/t/p/w500/${movie.poster_path}`,
-        });
-        console.log("Movie added to Firestore:", movie.title);
+        const user = auth.currentUser;
+        if (user) {
+          await addDoc(collection(db, "users", user.uid, "liked"), {
+            name: movie.title,
+            tmdbID: movie.id,
+            year: new Date(movie.release_date).getFullYear(),
+            image: `https://image.tmdb.org/t/p/w500/${movie.poster_path}`,
+          });
+          console.log("Movie added to Firestore:", movie.title);
+        } else {
+          console.error("No user is logged in");
+        }
       } catch (error) {
         console.error("Error adding document: ", error);
       }
@@ -125,7 +118,7 @@ const SwipeComponent = () => {
 
   const handleMovieImageClick = (movieId) => {
     fetchSimilarMovies(movieId);
-    setSwipedLeftMovies([]); // Clear swiped left movies for new round
+    setSwipedLeftMovies([]);
   };
 
   const handleImageError = (event) => {

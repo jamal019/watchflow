@@ -3,9 +3,11 @@
   margin-bottom: 10rem;
 }
 
-#swipeloader{
+#swipeloader {
   background-color: #e05a47;
-  position: absolute;
+  position: fixed; 
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
   z-index: 99;
@@ -13,45 +15,45 @@
   display: grid;
   place-items: center;
 }
-#swipeloader img{
+#swipeloader img {
   max-width: 225px;
 }
-#swipeloader.fadeOut{
+#swipeloader.fadeOut {
   animation: fadeOut 1000ms ease-in-out forwards;
 }
 @keyframes fadeOut {
-  to{
+  to {
     opacity: 0;
-    visibility: 0;
+    visibility: hidden; /* Ändern von 0 zu hidden */
     z-index: -999;
   }
 }
 
-.swipe-page{
+.swipe-page {
   padding: 4rem 2.35rem;
-  max-width: 1920px;
+  max-width: 1200px; /* Ändern von 1920px zu 1200px */
   margin: 0 auto;
   position: relative;
 }
 @media screen and (min-width: 750px) {
-.swipe-page {
+  .swipe-page {
     padding: 6rem 2.5rem;
-}
+  }
 }
 
 .swipe-component {
   /* gap: 1rem;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); */
-    position: relative;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-      /* height: 100vh; */
-      /*align-items: center;*/
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  /* height: 100vh; */
+  /* align-items: center; */
 }
 
-.swipe-thumbs{
+.swipe-thumbs {
   margin: 1rem 0;
   /* margin-bottom: 4rem; */
   display: flex;
@@ -62,17 +64,17 @@
     justify-content: space-around;
   }
 }
-.swipe-thumbs span{
+.swipe-thumbs span {
   font-size: 3rem;
 }
 
-/*New Round*/
-.swiped-left-movies{
+/* New Round */
+.swiped-left-movies {
   display: none;
   text-align: center;
   color: white;
 }
-.swiped-left-movies ul{
+.swiped-left-movies ul {
   list-style: none;
   text-align: left;
   display: flex;
@@ -81,18 +83,18 @@
   padding: 0;
   justify-content: center;
 }
-.swiped-left-movies-img{
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    object-position: top;
-    border-radius: 50%;
+.swiped-left-movies-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 50%;
 }
-.swiped-left-movies.reveal{
+.swiped-left-movies.reveal {
   display: block;
 }
 
-/*---XXX-----*/
+/* ---XXX----- */
 .movie-card {
   position: relative;
   width: 300px;

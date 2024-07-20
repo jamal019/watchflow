@@ -1,129 +1,126 @@
-/*GLOBAL STYLES*/
-
-/*FONT*/
-@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
-
-/*COLOR PALETTE*/
-$dark: #171515;
-$light: #f3f5f9;
-
-$red: #e76f51;
-$darkred: #e05a47;
-
-html,
-body {
+html, body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
 body {
   font-family: "Nunito";
-  background: $dark;
+  background: #171515;
   transition: background 300ms ease-in-out;
 }
+
 body.no-scroll {
   overflow-y: hidden;
 }
+
 body.liked-movie {
-  background: rgba(42, 157, 143, 1);
+  background: #2a9d8f;
 }
+
 body.disliked-movie {
-  background: $red;
+  background: #e76f51;
 }
-.app{
+
+.app {
   margin-bottom: 6rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 20px;
 }
-h1,
-h2,
-h3,
-p,
-span {
-  color: $light;
+
+h1, h2, h3, p, span {
+  color: #f3f5f9;
 }
+
 h1 {
   font-size: 2.5rem;
   font-weight: 800;
   text-align: center;
   margin: 0;
   padding-top: 15px;
-  //margin-bottom: 2.5rem;
 }
+
 h1#logo {
-  position: fixed;
+  position: center;
   z-index: 99;
-  // background-color: darken($dark, 1);
   width: 100%;
 }
+
 h2 {
   font-size: 1.7rem;
   margin: 1.7rem 0;
 }
+
 h3 {
   font-size: 1.35rem;
   margin: 1.35rem 0;
 }
+
 p {
   font-size: 1rem;
   margin: 0;
 }
+
 a {
   text-decoration: none;
 }
+
 .dark {
   color: #171515;
 }
 
 button {
-  background: $light;
-  color: $darkred;
+  background: #f3f5f9;
+  color: #e05a47;
   border: none;
   padding: 8px;
   font-weight: bold;
-  &:focus {
-    background-color: $darkred;
-    color: $light;
-  }
 }
 
-//INTRO
+button:focus {
+  background-color: #e05a47;
+  color: #f3f5f9;
+}
+
 #applogo {
-  // position: absolute;
   display: block;
   max-width: 110px;
-  // top: 8rem;
-  // left: 0;
-  // right: 0;
   margin: 2rem auto;
   border-radius: 100%;
   transform: rotate(0deg) scale(1.25);
   animation: logo 2500ms ease-in-out 500ms forwards;
 }
+
 #intro {
   position: fixed;
   height: 100vh;
   width: 100vw;
   background: linear-gradient(180deg, #e05a47, #e16959);
-  background-color: $darkred;
+  background-color: #e05a47;
   z-index: 999;
   text-align: center;
   display: grid;
   place-items: center;
   top: 0;
-  // div {
-  //   margin: 0 2rem;
-  // }
 }
+
 #intro.fadeOut {
   animation: fadeOut 1200ms ease-in-out forwards;
 }
+
 .login {
   display: flex;
   flex-flow: column wrap;
   gap: 1rem;
-  input {
-    border: none;
-    padding: 8px;
-  }
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.login input {
+  border: none;
+  padding: 8px;
 }
 
 @keyframes fadeOut {
@@ -139,27 +136,37 @@ button {
   }
 }
 
-//FOOTER
 footer {
   height: 65px;
-  background: $darkred;
+  background: #e05a47;
   position: fixed;
   bottom: 0;
-  width: 100vw;
+  left: 0;
+  right: 0;
+  width: 100%;
   border-radius: 30px 30px 0 0;
   z-index: 101;
-/*   @media screen and (min-width: 900px) {
-    display: none;
-  } */
-  svg{
-    width: 25px;
-    height: 25px;
-    display: block;
-  }
-  div {
-    padding: 25px 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-  }
+}
+
+footer div {
+  padding: 25px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+footer svg {
+  width: 25px;
+  height: 25px;
+  display: block;
+}
+
+footer div span {
+  display: inline-block;
+}
+
+footer div span.active > svg path {
+  fill: #171515;
 }
