@@ -53,10 +53,11 @@ const WatchPartyDetails = () => {
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
         setShowInviteModal(false);
+        setShowConfirmDelete(false);
       }
     };
     
-    if (showInviteModal) {
+    if (showInviteModal || showConfirmDelete) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -65,7 +66,7 @@ const WatchPartyDetails = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [showInviteModal]);
+  }, [showInviteModal, showConfirmDelete]);
 
   const handleDeleteParty = async () => {
     const partyRef = doc(db, "watchParties", partyId);
@@ -223,10 +224,13 @@ const WatchPartyDetails = () => {
           <button onClick={() => setShowConfirmDelete(true)} className="watchpartydetails-button">Delete Watch Party</button>
         </div>
         {showConfirmDelete && (
-          <div className="confirm-delete-dialog">
-            <p>Do you really want to delete this Watch Party?</p>
-            <button onClick={handleDeleteParty} className="confirm-button">Yes</button>
-            <button onClick={() => setShowConfirmDelete(false)} className="cancel-button">No</button>
+          <div className="confirm-delete-dialog invite-modal">
+            <div className="invite-modal-content" ref={modalRef}>
+              <span className="close" onClick={() => setShowConfirmDelete(false)}>&times;</span>
+              <p>Do you really want to delete this Watch Party?</p>
+              <button onClick={handleDeleteParty} className="confirm-button">Yes</button>
+              <button onClick={() => setShowConfirmDelete(false)} className="cancel-button">No</button>
+            </div>
           </div>
         )}
         {showInviteModal && (
