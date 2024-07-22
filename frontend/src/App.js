@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Favorite from "./pages/Favorite";
 import Watched from "./pages/Watched";
@@ -8,13 +8,9 @@ import WatchParty from "./components/WatchParty";
 import Profile from "./components/Profile";
 import CreateWatchParty from "./components/CreateWatchParty";
 import WatchPartyDetails from "./components/WatchPartyDetails";  
-import WatchPartyAdmin from "./components/WatchPartyAdmin"; 
 import InviteHandler from "./components/InviteHandler";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase";
-
-
-
 
 const App = () => {
   const [activePage, setActivePage] = useState("/");
@@ -29,22 +25,22 @@ const App = () => {
       <div className="app">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/favorites" element={<Favorite />} />
-          <Route path="/watched" element={<Watched />} />
-          <Route path="/watchparty" element={<WatchParty />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/create-watchparty/:movieId" element={<CreateWatchParty />} /> 
-          <Route path="/watchparty/:partyId" element={<WatchPartyDetails />} />
-          <Route path="/watchparty-admin" element={<WatchPartyAdmin />} />
+          <Route path="/favorites" element={<ProtectedRoute user={user}><Favorite /></ProtectedRoute>} />
+          <Route path="/watched" element={<ProtectedRoute user={user}><Watched /></ProtectedRoute>} />
+          <Route path="/watchparty" element={<ProtectedRoute user={user}><WatchParty /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute user={user}><Profile /></ProtectedRoute>} />
+          <Route path="/create-watchparty/:movieId" element={<ProtectedRoute user={user}><CreateWatchParty /></ProtectedRoute>} /> 
+          <Route path="/watchparty/:partyId" element={<ProtectedRoute user={user}><WatchPartyDetails /></ProtectedRoute>} />
           <Route path="/watchparty/:partyId/invite" element={<InviteHandler />} />
-
-
-          {/* <Route path="/detail/:id" element={<Detail />} /> */}
         </Routes>
-        <Footer activePage={activePage} onPageChange={handlePageChange} />
+        {user && <Footer activePage={activePage} onPageChange={handlePageChange} />}
       </div>
     </Router>
   );
+};
+
+const ProtectedRoute = ({ user, children }) => {
+  return user ? children : <Navigate to="/" />;
 };
 
 export default App;

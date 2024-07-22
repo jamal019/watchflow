@@ -39,11 +39,20 @@ const WatchParty = () => {
       <div className="party-list">
         {watchParties.map((party) => (
           <div key={party.id} className="party-item">
-            <Link to={`/watchparty/${party.id}`}>
-              <h2>{party.name}</h2>
-              <p>{formatDate(party.date)} um {party.time}</p>
-              <p>{party.movieTitle}</p>
-            </Link>
+            <div className="party-link-container">
+              <Link to={`/watchparty/${party.id}`} className="party-link">
+                <img
+                  className="party-img"
+                  src={`https://image.tmdb.org/t/p/w500${party.moviePoster}`}
+                  alt={party.movieTitle}
+                />
+                <div>
+                  <h2>{party.name}</h2>
+                  <p>{formatDate(party.date)} at {party.time}</p>
+                  <p>{party.movieTitle}</p>
+                </div>
+              </Link>
+            </div>
           </div>
         ))}
       </div>

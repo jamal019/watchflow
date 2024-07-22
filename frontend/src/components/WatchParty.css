@@ -1,44 +1,92 @@
 .watchparty-page {
-    padding: 20px;
+  padding: 20px;
+}
+
+.create-party {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.create-party input {
+  margin: 5px 0;
+  padding: 10px;
+}
+
+.create-party button {
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.party-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.party-item {
+  display: flex;
+  gap: 20px;
+  padding: 10px;
+  border: 2px solid #e05a47;
+  border-radius: 5px;
+  align-items: center;
+  flex-direction: column;
+}
+
+.party-link-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  text-decoration: none;
+}
+
+.party-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  gap: 20px;
+}
+
+.party-link img {
+  width: 150px;
+  height: 150px;
+  border-radius: 100%;
+  object-fit: cover;
+  border: 2px solid #ffffff;
+}
+
+@media (max-width: 768px) {
+  .party-link img {
+    width: 100px;
+    height: 100px;
   }
-  
-  .create-party {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-  }
-  
-  .create-party input {
-    margin: 5px 0;
-    padding: 10px;
-  }
-  
-  .create-party button {
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .party-list {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .party-item {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .party-item h2 {
-    margin: 0;
-  }
-  
-  .party-details {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-top: 20px;
-  }
-  
+}
+
+.party-link div {
+  display: flex;
+  flex-direction: column;
+}
+
+.party-item h2 {
+  margin: 0;
+}
+
+.party-item p {
+  margin: 0;
+}
+
+.party-item button {
+  padding: 5px 10px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+.party-details {
+  margin-top: 20px;
+}

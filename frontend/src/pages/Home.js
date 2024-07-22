@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import SwipeComponent from "../components/SwipeComponent";
 import Intro from "../components/Intro";
+import { auth } from "../firebase";
 
 const Home = () => {
   const [showIntro, setShowIntro] = useState(true);
   const [username, setUsername] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loggedIn = localStorage.getItem("isLoggedIn");
