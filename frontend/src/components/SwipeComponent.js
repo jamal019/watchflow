@@ -42,6 +42,10 @@ const SwipeComponent = () => {
           setMovies(data.results);
         }
         setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching movies:", error);
+        setLoading(false);
       });
   }, [TMDB_API_KEY, options]);
 
@@ -55,13 +59,21 @@ const SwipeComponent = () => {
       )
         .then((response) => response.json())
         .then((data) => {
+          console.log(data); // Log the data to debug
           if (data && data.results) {
             setMovies(data.results);
+          } else {
+            setMovies([]); // Set movies to an empty array if no results
           }
           setLoading(false);
           setTimeout(() => {
             setShowLoader(false);
           }, 3000);
+        })
+        .catch((error) => {
+          console.error("Error fetching similar movies:", error);
+          setLoading(false);
+          setShowLoader(false);
         });
     },
     [TMDB_API_KEY, options]
@@ -164,6 +176,7 @@ const SwipeComponent = () => {
                 movie={movie}
                 onClick={() => handleDetailsClick(movie.id)}
                 onSwipe={handleSwipe}
+                fetchMovies={fetchMovies}
               />
             ))
           )}
