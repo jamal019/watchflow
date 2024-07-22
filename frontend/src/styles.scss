@@ -1,4 +1,15 @@
-html, body {
+/*FONT*/
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+
+/*COLOR PALETTE*/
+$dark: #171515;
+$light: #f3f5f9;
+
+$red: #e76f51;
+$darkred: #e05a47;
+
+html,
+body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -24,13 +35,17 @@ body.disliked-movie {
 
 .app {
   margin-bottom: 6rem;
-  max-width: 1200px;
+  /*max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
-  padding: 0 20px;
+  padding: 0 20px;*/
 }
 
-h1, h2, h3, p, span {
+h1,
+h2,
+h3,
+p,
+span {
   color: #f3f5f9;
 }
 
@@ -72,16 +87,16 @@ a {
 }
 
 button {
-  background: #f3f5f9;
-  color: #e05a47;
+  padding: 10px;
+  background-color: #e05a47;
+  color: white;
   border: none;
-  padding: 8px;
-  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-button:focus {
-  background-color: #e05a47;
-  color: #f3f5f9;
+button:hover {
+  opacity: 0.85;
 }
 
 #applogo {
@@ -169,4 +184,8 @@ footer div span {
 
 footer div span.active > svg path {
   fill: #171515;
+}
+
+span{
+  cursor: pointer;
 }

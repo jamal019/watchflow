@@ -210,6 +210,7 @@ const WatchPartyDetails = () => {
       <div className="modal-details-text">
         <h2>{partyDetails.name}</h2>
         <h3>Movie: {partyDetails.movieTitle}</h3>
+        <div className="watchparty-wrap">
         {partyDetails.trailerKey ? (
           <div className="modal-details-video-container">
             <iframe
@@ -227,6 +228,7 @@ const WatchPartyDetails = () => {
         ) : (
           <p>Trailer not available</p>
         )}
+        <div className="party-details-content">
         <p>{partyDetails.movieOverview}</p>
         <h4>Party Time: {formatDate(partyDetails.date)} at {partyDetails.time}</h4>
         <h3>Where to watch</h3>
@@ -297,6 +299,8 @@ const WatchPartyDetails = () => {
           ></textarea>
         </div>
         <Chat partyId={partyId} />
+        </div>
+      </div>
       </div>
     </section>
   );

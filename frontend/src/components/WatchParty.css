@@ -50,7 +50,7 @@
   align-items: center;
   text-decoration: none;
   color: inherit;
-  gap: 20px;
+  gap: 10px;
 }
 
 .party-link img {
@@ -63,8 +63,8 @@
 
 @media (max-width: 768px) {
   .party-link img {
-    width: 100px;
-    height: 100px;
+    width: 70px;
+    height: 70px;
   }
 }
 

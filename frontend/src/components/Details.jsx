@@ -148,7 +148,7 @@ const Details = ({ movieId }) => {
                 </button>
               </Link>
             </div>
-            <div style={{ height: "25vh" }}></div>
+            <div className="space-bottom"></div>
           </div>
         </>
       )}

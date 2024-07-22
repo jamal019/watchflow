@@ -1,156 +1,162 @@
 .details-page {
-    padding: 20px;
-    color: white;
-  }
-  
-  .modal-details-video-container {
-    position: relative;
-    width: 100%;
-    padding-bottom: 56.25%;
-    height: 0;
-    overflow: hidden;
-    border: 1px solid #e05a47;
-    border-radius: 5px;
-    margin-bottom: 15px;
-  }
-  
-  .modal-details-video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
-  
-  .providers ul {
-    list-style-type: none;
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 2rem;
-    padding: 0;
-  }
-  
-  .button-container {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
+  padding: 20px;
+  color: white;
 }
-  
-  .watchpartydetails-button {
-    padding: 10px;
-    background-color: #e05a47;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .confirm-delete-dialog {
-    margin-top: 15px;
-    padding: 20px;
-    background-color: #444;
-    border: 1px solid #e05a47;
-    text-align: center;
-  }
-  
-  .confirm-button,
-  .cancel-button {
-    margin: 10px;
-    padding: 10px;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-  }
-  
-  .confirm-button {
-    background-color: #e05a47;
-    color: white;
-    border: none;
-  }
-  
-  .cancel-button {
-    background-color: #ccc;
-    color: black;
-    border: none;
-  }
-  
-  .notes-section {
-    margin-top: 15px;
-  }
-  
-  .notes-section textarea {
-    width: 100%;
-    height: 120px;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #e05a47;
-    background-color: #444;
-    color: white;
-    resize: none;
-    box-sizing: border-box;
-  }
-  
-  .invite-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+@media screen and (min-width: 900px) {
+  .details-page {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
-    overflow: auto;
+    gap: 2rem;
   }
-  
-  .invite-modal-content {
-    background-color: #444;
-    padding: 20px;
-    border-radius: 5px;
-    width: 80%;
-    max-width: 500px;
-    text-align: center;
-    color: white;
-    position: relative;
+}
+
+@media screen and (min-width: 900px) {
+  .watchparty-wrap {
+    display: flex;
+    gap: 2rem;
   }
-  
-  .invite-modal-content .close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 24px;
-    cursor: pointer;
-    color: white;
-  }
-  
-  .invite-modal-content input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #e05a47;
-    border-radius: 5px;
-    background-color: #555;
-    color: white;
-    box-sizing: border-box;
-  }
-  
-  .invite-button,
-  .copy-link-button,
-  .share-link-button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    border: none;
-    border-radius: 5px;
-    background-color: #e05a47;
-    color: white;
-    cursor: pointer;
-  }
-  
-  
-  
+}
+
+.modal-details-video-container {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.modal-details-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.providers ul {
+  list-style-type: none;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 2rem;
+  padding: 0;
+}
+
+.button-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.watchpartydetails-button {
+  padding: 10px;
+  background-color: #e05a47;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.confirm-delete-dialog {
+  margin-top: 15px;
+  padding: 20px;
+  background-color: #444;
+  border: 1px solid #e05a47;
+  text-align: center;
+}
+
+.confirm-button,
+.cancel-button {
+  margin: 10px;
+  padding: 10px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+}
+
+.confirm-button {
+  background-color: #e05a47;
+  color: white;
+  border: none;
+}
+
+.cancel-button {
+  background-color: #ccc;
+  color: black;
+  border: none;
+}
+
+.notes-section {
+  margin-top: 15px;
+}
+
+.notes-section textarea {
+  width: 100%;
+  height: 120px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #e05a47;
+  background-color: #444;
+  color: white;
+  resize: none;
+  box-sizing: border-box;
+}
+
+.invite-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  overflow: auto;
+}
+
+.invite-modal-content {
+  background-color: #444;
+  padding: 20px;
+  border-radius: 5px;
+  width: 80%;
+  max-width: 500px;
+  text-align: center;
+  color: white;
+  position: relative;
+}
+
+.invite-modal-content .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  cursor: pointer;
+  color: white;
+}
+
+.invite-modal-content input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #e05a47;
+  border-radius: 5px;
+  background-color: #555;
+  color: white;
+  box-sizing: border-box;
+}
+
+.invite-button,
+.copy-link-button,
+.share-link-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: none;
+  border-radius: 5px;
+  background-color: #e05a47;
+  color: white;
+  cursor: pointer;
+}

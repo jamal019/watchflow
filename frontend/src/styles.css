@@ -1,4 +1,8 @@
-html, body {
+/*FONT*/
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+/*COLOR PALETTE*/
+html,
+body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -24,13 +28,17 @@ body.disliked-movie {
 
 .app {
   margin-bottom: 6rem;
-  max-width: 1200px;
+  /*max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
-  padding: 0 20px;
+  padding: 0 20px;*/
 }
 
-h1, h2, h3, p, span {
+h1,
+h2,
+h3,
+p,
+span {
   color: #f3f5f9;
 }
 
@@ -72,16 +80,16 @@ a {
 }
 
 button {
-  background: #f3f5f9;
-  color: #e05a47;
+  padding: 10px;
+  background-color: #e05a47;
+  color: white;
   border: none;
-  padding: 8px;
-  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-button:focus {
-  background-color: #e05a47;
-  color: #f3f5f9;
+button:hover {
+  opacity: 0.85;
 }
 
 #applogo {
@@ -94,8 +102,9 @@ button:focus {
 }
 
 #intro {
-  position: center;
+  position: fixed;
   height: 100vh;
+  width: 100vw;
   background: linear-gradient(180deg, #e05a47, #e16959);
   background-color: #e05a47;
   z-index: 999;
@@ -128,13 +137,11 @@ button:focus {
     visibility: none;
   }
 }
-
 @keyframes logo {
   to {
     transform: rotate(360deg) scale(1);
   }
 }
-
 footer {
   height: 65px;
   background: #e05a47;
@@ -169,3 +176,9 @@ footer div span {
 footer div span.active > svg path {
   fill: #171515;
 }
+
+span {
+  cursor: pointer;
+}
+
+/*# sourceMappingURL=styles.css.map */

@@ -84,6 +84,8 @@ const Favorite = () => {
     <>
       <div className="favoritesPage">
         <h1>Favorites</h1>
+        <br/>
+        <button className="shareBtn" onClick={() => shareOnWhatsApp(favorites)}>Share</button>
         <div className="favoritesWrap">
           {favorites.map((fav) => (
             <div key={fav.tmdbID} className="favoritesList">
@@ -111,8 +113,6 @@ const Favorite = () => {
             </div>
           ))}
         </div>
-        <br/> <br/>
-        <button className="shareBtn" onClick={() => shareOnWhatsApp(favorites)}>Share on WhatsApp</button>
       </div>
 
       {selectedMovieId && (
