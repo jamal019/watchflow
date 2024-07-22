@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { db, auth } from "../firebase";
 import { collection, doc, getDoc, setDoc, onSnapshot, addDoc, serverTimestamp, query, orderBy, deleteDoc } from "firebase/firestore";
+import emailjs from 'emailjs-com'; // Import EmailJS
 import "./WatchPartyDetails.css";
 import Chat from "./Chat"; 
 import debounce from 'lodash/debounce';
@@ -16,10 +17,23 @@ const WatchPartyDetails = () => {
   const [notes, setNotes] = useState("");
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [username, setUsername] = useState("Unknown User");
 
   const modalRef = useRef(null);
 
   useEffect(() => {
+    const fetchUsername = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if (userDoc.exists()) {
+          setUsername(userDoc.data().username);
+        }
+      }
+    };
+
+    fetchUsername();
+
     const fetchPartyDetails = async () => {
       const partyRef = doc(db, "watchParties", partyId);
       const partySnap = await getDoc(partyRef);
@@ -90,6 +104,7 @@ const WatchPartyDetails = () => {
       const messagesRef = collection(db, `watchParties/${partyId}/messages`);
       await addDoc(messagesRef, {
         text: newMessage,
+        username: username,
         timestamp: serverTimestamp(),
       });
       setNewMessage("");
@@ -106,7 +121,31 @@ const WatchPartyDetails = () => {
   };
 
   const handleSendInvite = () => {
-    console.log(`Invitation sent to ${inviteEmail}`);
+    const user = auth.currentUser;
+    if (!user) {
+      alert("You must be logged in to send an invite.");
+      return;
+    }
+
+    const emailParams = {
+      to_email: inviteEmail,
+      from_name: username,
+      message: `I would like to invite you to my WatchParty for the movie ${partyDetails.movieTitle} which begins on ${formatDate(partyDetails.date)} at ${partyDetails.time}.`,
+      invite_link: `${window.location.origin}/watchparty/${partyId}/invite`
+    };
+
+    console.log('Sending email with params:', emailParams); // Debugging log
+
+    emailjs.send('service_fdz5t3p', 'template_c2655t8', emailParams, 'iJfGCKYZBHLsjU3gi')
+      .then((response) => {
+        console.log('Email sent successfully:', response.status, response.text);
+        alert("Invitation sent successfully!");
+      })
+      .catch((error) => {
+        console.error('Failed to send email:', error);
+        alert("Failed to send invitation.");
+      });
+
     setInviteEmail("");
     setShowInviteModal(false);
   };
@@ -148,19 +187,19 @@ const WatchPartyDetails = () => {
           await setDoc(partyRef, {
             participants: {
               [user.uid]: {
-                username: user.displayName || "Unknown User",
+                username: user.displayName || username,
                 role: "participant"
               }
             }
           }, { merge: true });
           console.log("User added as participant");
-          setPartyDetails({ ...partyData, participants: { ...partyData.participants, [user.uid]: { username: user.displayName || "Unknown User", role: "participant" } } });
+          setPartyDetails({ ...partyData, participants: { ...partyData.participants, [user.uid]: { username: user.displayName || username, role: "participant" } } });
         }
       }
     };
 
     checkAndAddParticipant();
-  }, [partyId]);
+  }, [partyId, username]);
 
   if (!partyDetails) {
     return <div>Loading...</div>;
