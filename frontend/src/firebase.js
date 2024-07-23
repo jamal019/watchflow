@@ -26,7 +26,6 @@ export const registerWithEmailAndPassword = async (email, password, username) =>
     username
   });
 
-  // Initialisiere die "liked" und "watched" Sammlungen für den Benutzer
   await setDoc(doc(userDocRef, "liked", "initialDoc"), {});
   await setDoc(doc(userDocRef, "watched", "initialDoc"), {});
   
