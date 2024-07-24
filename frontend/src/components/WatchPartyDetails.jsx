@@ -130,7 +130,7 @@ const WatchPartyDetails = () => {
     const emailParams = {
       to_email: inviteEmail,
       from_name: username,
-      message: `I would like to invite you to my WatchParty for the movie ${partyDetails.movieTitle} which begins on ${formatDate(partyDetails.date)} at ${partyDetails.time}.`,
+      message: `"I would like to invite you to my WatchParty for the movie ${partyDetails.movieTitle} which begins on ${formatDate(partyDetails.date)} at ${partyDetails.time}."`,
       invite_link: `${window.location.origin}/watchparty/${partyId}/invite`
     };
 
