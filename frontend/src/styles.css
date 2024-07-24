@@ -50,6 +50,10 @@ h1 {
   padding-top: 15px;
 }
 
+.profile h2 {
+  text-align: center;
+}
+
 h1#logo {
   position: center;
   z-index: 99;
@@ -157,6 +161,11 @@ footer {
   z-index: 101;
 }
 
+@media screen and (min-width: 900px) {
+  footer {
+    background: transparent;
+  }
+}
 footer div {
   padding: 25px 0;
   display: flex;
@@ -180,6 +189,11 @@ footer div span.active > svg path {
   fill: #171515;
 }
 
+@media screen and (min-width: 900px) {
+  footer div span.active > svg path {
+    fill: #e05a47 !important;
+  }
+}
 span {
   cursor: pointer;
 }
