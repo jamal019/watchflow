@@ -268,6 +268,7 @@ const WatchPartyDetails = () => {
           <div className="confirm-delete-dialog invite-modal">
             <div className="invite-modal-content" ref={modalRef}>
               <span className="close" onClick={() => setShowConfirmDelete(false)}>&times;</span>
+              <br/>
               <p>Do you really want to delete this Watch Party?</p>
               <button onClick={handleDeleteParty} className="confirm-button">Yes</button>
               <button onClick={() => setShowConfirmDelete(false)} className="cancel-button">No</button>
