@@ -31,6 +31,7 @@ body.disliked-movie {
   max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
+  padding-top: 20px;
 }
 
 h1,
@@ -45,7 +46,7 @@ h1 {
   font-size: 2.5rem;
   font-weight: 800;
   text-align: center;
-  margin: 0 0 1.5rem 0;
+  margin: 0 0 1rem 0;
   padding-top: 15px;
 }
 
