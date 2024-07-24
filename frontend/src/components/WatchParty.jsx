@@ -57,7 +57,7 @@ const WatchParty = () => {
                 />
                 <div>
                   <h2>{party.name}</h2>
-                  <p>
+                  <p className="party-date">
                     {formatDate(party.date)} at {party.time}
                   </p>
                   <p>{party.movieTitle}</p>

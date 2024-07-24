@@ -11,6 +11,9 @@
   }
 }
 
+.watchparty-page{
+  padding: 0 2rem;
+}
 @media screen and (min-width: 900px) {
   .watchparty-wrap {
     display: flex;

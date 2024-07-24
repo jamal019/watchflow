@@ -19,30 +19,38 @@
 
 .party-list {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 20px;
+  flex-flow: row wrap;
+  justify-content: center;
+  gap: 4rem;
+  margin-top: 4rem;
 }
 
-.party-item {
-  display: flex;
-  gap: 20px;
+.party-item{
   padding: 10px;
-  border: 2px solid #e05a47;
-  border-radius: 5px;
-  align-items: center;
-  flex-direction: column;
+  transition: all 200ms;
+}
+.party-item:hover{
+  background: #f9e1de17;
+}
+@media screen and (min-width: 768px) {
+  .party-item{
+    min-width: 350px;
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+  .party-item{
+    width: 100%;
+  }
 }
 
 .party-link-container {
-  display: flex;
-  align-items: center;
-  gap: 20px;
   text-decoration: none;
+  text-align: center;
 }
 
 .party-link {
-  display: flex;
   align-items: center;
   text-decoration: none;
   color: inherit;
@@ -50,23 +58,25 @@
 }
 
 .party-link img {
-  width: 150px;
-  height: 150px;
+  width: 125px;
+  height: 125px;
   border-radius: 100%;
   object-fit: cover;
-  border: 2px solid #ffffff;
+  border: 4px solid #e05947b4;
 }
 
-@media (max-width: 768px) {
-  .party-link img {
-    width: 70px;
-    height: 70px;
-  }
-}
 
 .party-link div {
   display: flex;
   flex-direction: column;
+}
+
+.party-link .party-date{
+  background: #e05a47;
+  padding: 6px;
+  border-radius: 6px;
+  width: max-content;
+  margin: .5rem auto;
 }
 
 .party-item h2 {
