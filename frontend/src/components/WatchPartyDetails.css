@@ -6,8 +6,16 @@
   .details-page {
     display: flex;
     justify-content: center;
-    align-items: center;
     gap: 2rem;
+  }
+}
+
+@media screen and (min-width: 900px) {
+  .details-page h2{
+    margin-top: 0;
+  }
+  .favoritesPage .details-page .modal-details-text{
+    max-width: 800px;
   }
 }
 
