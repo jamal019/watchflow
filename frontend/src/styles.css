@@ -28,10 +28,9 @@ body.disliked-movie {
 
 .app {
   margin-bottom: 6rem;
-  /*max-width: 1200px;
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
-  padding: 0 20px;*/
 }
 
 h1,
@@ -80,7 +79,7 @@ a {
 }
 
 button {
-  padding: 14px;
+  padding: 10px;
   background-color: #e05a47;
   color: white;
   border: none;
@@ -105,7 +104,8 @@ button:hover {
   position: fixed;
   height: 100vh;
   width: 100vw;
-  background: #171515;
+  background: linear-gradient(180deg, #e05a47, #e16959);
+  background-color: #e05a47;
   z-index: 999;
   text-align: center;
   display: grid;
@@ -127,7 +127,7 @@ button:hover {
 
 .login input {
   border: none;
-  padding: 14px;
+  padding: 8px;
 }
 
 @keyframes fadeOut {

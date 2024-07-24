@@ -84,9 +84,8 @@ const Favorite = () => {
           ) : (
             favorites.map((fav) => (
               <div key={fav.tmdbID} className="favoritesList">
-                <div className="favoriteItem">
+                <div className="favoriteItem" onClick={() => handleDetailsClick(fav.tmdbID)}>
                   <img
-                    onClick={() => handleDetailsClick(fav.tmdbID)}
                     className="favoriteImg"
                     src={fav.image}
                     alt={fav.image}

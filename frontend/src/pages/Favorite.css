@@ -10,11 +10,11 @@
   padding-bottom: 1rem;
   width: 100%;
 }
-@media screen and (min-width: 1440px) {
+/* @media screen and (min-width: 1440px) {
   .favoritesPage .favoritesList {
     width: 30%;
   }
-}
+} */
 .favoritesPage .favoritesList:nth-of-type(odd) {
   background-color: #2e2929;
 }
@@ -32,8 +32,10 @@
   border-radius: 100%;
   object-fit: cover;
 }
-.favoriteName {
-  max-width: 160px;
+@media screen and (max-width:900px) {
+  .favoriteName {
+    max-width: 200px;
+  } 
 }
 
 .actions {
