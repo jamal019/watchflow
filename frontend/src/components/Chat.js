@@ -50,14 +50,21 @@ const Chat = ({ partyId }) => {
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      sendMessage();
+    }
+  };
+
   return (
     <div className="chat">
       <div className="chat-messages">
         {messages.map((message) => (
           <div key={message.id} className="chat-message">
-            <span className="chat-username">{message.username}</span>
-            <span>{message.text}</span>
-            <span className="chat-timestamp">{new Date(message.timestamp).toLocaleTimeString()}</span>
+            <p className="chat-username"><strong>{message.username}</strong></p>
+            <br/>
+            <p>{message.text}</p>
+            <p className="chat-timestamp">{new Date(message.timestamp).toLocaleTimeString()}</p>
           </div>
         ))}
       </div>
@@ -66,6 +73,7 @@ const Chat = ({ partyId }) => {
           type="text"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
+          onKeyDown={handleKeyDown}
           placeholder="Type your message..."
         />
         <button onClick={sendMessage}>Send</button>

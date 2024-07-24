@@ -4,6 +4,7 @@
     padding: 10px;
     margin-top: 15px;
     border: 1px solid #e05a47;
+    max-width: 1000px;
   }
   
   .chat-messages {
@@ -20,10 +21,10 @@
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 5px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+    display: flex;
+    flex-flow: column wrap;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
   }
   .chat-message span{
     white-space: nowrap;
@@ -34,6 +35,7 @@
     font-size: 0.8rem;
     color: #ccc;
     margin-left: 10px;
+    align-self: flex-end;
   }
   
   .chat-input {

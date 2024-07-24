@@ -28,7 +28,7 @@ body.disliked-movie {
 
 .app {
   margin-bottom: 6rem;
-  max-width: 1200px;
+  max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -111,6 +111,9 @@ button:hover {
   display: grid;
   place-items: center;
   top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 #intro.fadeOut {
