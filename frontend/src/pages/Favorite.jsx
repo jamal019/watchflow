@@ -87,7 +87,7 @@ const Favorite = () => {
                     alt={fav.image}
                   />
                   <p className="favoriteName">
-                    {fav.name}, {fav.year}
+                    <strong>{fav.name}</strong> ({fav.year})
                   </p>
                 </div>
                 <div className="actions">
