@@ -26,9 +26,6 @@ export const registerWithEmailAndPassword = async (email, password, username) =>
     username
   });
 
-  await setDoc(doc(userDocRef, "liked", "initialDoc"), {});
-  await setDoc(doc(userDocRef, "watched", "initialDoc"), {});
-  
   return user;
 };
 

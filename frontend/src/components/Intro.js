@@ -92,7 +92,7 @@ const Intro = ({ onLogin }) => {
                 value={confirmPassword} 
                 onChange={(e) => setConfirmPassword(e.target.value)} 
               />
-              <button onClick={handleRegister}>REGISTER</button>
+              <button onClick={handleRegister}>Register</button>
               <button onClick={() => setIsRegister(false)}>Go to Login</button>
             </>
           ) : (
@@ -109,7 +109,7 @@ const Intro = ({ onLogin }) => {
                 value={password} 
                 onChange={(e) => setPassword(e.target.value)} 
               />
-              <button onClick={handleLogin}>LOGIN</button>
+              <button onClick={handleLogin}>Login</button>
               <button onClick={() => setIsRegister(true)}>Register</button>
             </>
           )}
