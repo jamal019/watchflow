@@ -3,7 +3,6 @@ import "./Favorite.css";
 import Details from "../components/Details";
 import { db, auth } from "../firebase";
 import { collection, onSnapshot, deleteDoc, doc } from "firebase/firestore";
-import queryString from 'query-string';
 
 const Watched = () => {
   const [selectedMovieId, setSelectedMovieId] = useState(null);
@@ -52,10 +51,6 @@ const Watched = () => {
         console.error("Error removing document: ", error);
       });
     }
-  };
-
-  const formatMovieList = (movies) => {
-    return movies.map(movie => `${movie.name} (${movie.year})`).join('\n');
   };
 
   return (
